@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(meta = (DisplayName = "Tracking"))
 class PROJECTTITAN_API UTiAnimNotifyState_Tracking : public UAnimNotifyState
 {
 	GENERATED_BODY()

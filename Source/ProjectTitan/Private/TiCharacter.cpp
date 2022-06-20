@@ -201,6 +201,47 @@ void ATiCharacter::AddStartupEffects()
 	}
 }
 
+void ATiCharacter::RemoveCharacterAbilities()
+{
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+
+	// Remove any abilities added from a previous call. This checks to make sure the ability is in the startup 'CharacterAbilities' array.
+	TArray<FGameplayAbilitySpecHandle> AbilitiesToRemove;
+	
+	for (const FGameplayAbilitySpec& Spec : AbilitySystemComponent->GetActivatableAbilities())
+	{
+		if ((Spec.SourceObject == this) && CharacterAbilities.Contains(Spec.Ability->GetClass()))
+		{
+			AbilitiesToRemove.Add(Spec.Handle);
+		}
+	}
+
+	// Do in two passes so the removal happens after we have the full list
+	for (int32 i = 0; i < AbilitiesToRemove.Num(); i++)
+	{
+		AbilitySystemComponent->ClearAbility(AbilitiesToRemove[i]);
+	}
+
+	
+}
+
+void ATiCharacter::Die()
+{
+	RemoveCharacterAbilities();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->GravityScale = 0;
+	GetCharacterMovement()->Velocity = FVector(0);
+
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->CancelAllAbilities();
+	}
+}
+
 UAbilitySystemComponent* ATiCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;

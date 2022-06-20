@@ -5,8 +5,7 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
-#include "AbilitySystem/Abilities/TiGA_Moveset.h"
-
+#include "AI/TiAttackSortingComponent.h"
 
 UTiBTService_SortMovesByDistance::UTiBTService_SortMovesByDistance()
 {
@@ -33,30 +32,33 @@ void UTiBTService_SortMovesByDistance::TickNode(UBehaviorTreeComponent& OwnerCom
 				{
 					float DistanceTo = FVector::Distance(TargetActor->GetActorLocation(), AIPawn->GetActorLocation());
 
+					BlackboardComp->SetValueAsFloat(Distance.SelectedKeyName, DistanceTo);
+					
 					if (ActivateDebug)
 					{
 						FString DistanceDebug = FString::Printf(TEXT("Distance: %f"), DistanceTo);
 						GEngine->AddOnScreenDebugMessage(-1, Interval, FColor::Green, DistanceDebug);
 					}
-
-					bool IsAttacking = BlackboardComp->GetValueAsBool("IsAttacking");
 					
+					//bool IsAttacking = BlackboardComp->GetValueAsBool("IsAttacking");
+
+					/*
 					if (IsAttacking)
 					{
-						UTiGA_Moveset* Moveset = Cast<UTiGA_Moveset>(BlackboardComp->GetValueAsObject("Moveset"));
+						UTiAttackSortingComponent* SortingComponent = Cast<UTiAttackSortingComponent>(OwnerComp.GetOwner()->GetComponentByClass(UTiAttackSortingComponent::StaticClass()));
 						
-						TArray<FAttackData> AttackDatas;
+						TArray<FAttack> AttackDatas;
 						
-						AttackDatas = Moveset->AttackDatas;
+						AttackDatas = SortingComponent->AttackDatas;
 
 						int32 Index = 0;
 
 						TArray<int32> SortedAttackIndexes;
 						
-						for (FAttackData AttackData : AttackDatas)
+						for (FAttack& AttackData : AttackDatas)
 						{
-							FAttackData OutAttack;
-							Moveset->IncrementScoreByCurve(Index, DistanceTo, OutAttack);
+							FAttack OutAttack;
+							SortingComponent->IncrementScoreByCurve(Index, DistanceTo, OutAttack);
 
 							if(OutAttack.IsInThreshold())
 							{
@@ -79,6 +81,7 @@ void UTiBTService_SortMovesByDistance::TickNode(UBehaviorTreeComponent& OwnerCom
 							BlackboardComp->SetValueAsInt(AttackIndex.SelectedKeyName, IndexToExecute);
 						}
 					}
+				*/
 				}
 			}
 		}

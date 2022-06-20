@@ -3,15 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/TiGameplayAbility.h"
-#include "TiGA_Moveset.generated.h"
+#include "GameplayTagContainer.h"
+#include "Components/ActorComponent.h"
+#include "TiAttackSortingComponent.generated.h"
 
 USTRUCT(BlueprintType)
-struct FComboData
+struct FCombo
 {
 	GENERATED_BODY()
 
-	FComboData()
+	FCombo()
 	{
 		Index = -1;
 
@@ -26,7 +27,7 @@ struct FComboData
 };
 
 USTRUCT(BlueprintType)
-struct FAttackData
+struct FAttack
 {
 	GENERATED_BODY()
 
@@ -44,9 +45,6 @@ struct FAttackData
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FName AttackName;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UAnimMontage* Montage;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FRuntimeFloatCurve DistanceCurve;
 
@@ -63,22 +61,23 @@ struct FAttackData
 	float DecrementScoreExecuted;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FComboData ComboData;
+	FCombo ComboData;
+
 };
 
-/**
- * 
- */
-UCLASS()
-class PROJECTTITAN_API UTiGA_Moveset : public UTiGameplayAbility
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class PROJECTTITAN_API UTiAttackSortingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+public:	
+	// Sets default values for this component's properties
+	UTiAttackSortingComponent();
 
 public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (TitleProperty = "AttackName"), Category = "Attacks")
-	TArray<FAttackData> AttackDatas;
+	TArray<FAttack> AttackDatas;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attacks")
 	float ComboWindow;
@@ -87,10 +86,11 @@ public:
 	bool bIsInCombo;
 
 	UFUNCTION(BlueprintCallable)
-	void IncrementScoreByCurve(int32 AttackIndex ,float Distance, FAttackData& OutAttack);
+	void IncrementScoreByCurve(int32 AttackIndex ,float Distance, FAttack& OutAttack);
 
 	UFUNCTION(BlueprintCallable)
 	void ResetAttackScore(int32 AttackIndex, bool InCombo);
 
-	UTiGA_Moveset();
+	UFUNCTION(BlueprintCallable)
+	FGameplayTag ConvertIndexToTag(int32 AttackIndex);
 };

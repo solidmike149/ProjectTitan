@@ -18,6 +18,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	FBlackboardKeySelector AttackIndex;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	FBlackboardKeySelector Distance;
 	
 	UPROPERTY(EditAnywhere, Category = "AI")
 	bool ActivateDebug;

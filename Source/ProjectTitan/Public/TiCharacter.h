@@ -93,6 +93,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsAlive() const;
 
+	void RemoveCharacterAbilities();
+
+	virtual void Die();
+	
 	UPROPERTY(BlueprintReadWrite)
 	TArray<AActor*> Targets;
 

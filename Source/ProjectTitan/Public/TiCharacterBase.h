@@ -5,30 +5,31 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
-#include "Interfaces/TiTargetInterface.h"
-#include "TiAiCharacter.generated.h"
+#include "TiCharacterBase.generated.h"
 
+class UTiAbilitySystemComponent;
 class UGameplayEffect;
 class UTiGameplayAbility;
-class UTiAbilitySystemComponent;
-class UWidgetComponent;
 
 UCLASS()
-class PROJECTTITAN_API ATiAiCharacter : public ACharacter, public IAbilitySystemInterface, public ITiTargetInterface
+class PROJECTTITAN_API ATiCharacterBase : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
+public:
+
+	// Implement IAbilitySystemInterface
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	ATiCharacterBase(const FObjectInitializer& ObjectInitializer);
+
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UWidgetComponent* TargetWidget;
-
-	UPROPERTY(BlueprintReadWrite)
-	AActor* Player;
-
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "Abilities")
 	UTiAbilitySystemComponent* AbilitySystemComponent;
-
+	
 	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
 	TArray<TSubclassOf<UTiGameplayAbility>> CharacterAbilities;
@@ -47,16 +48,13 @@ protected:
 	virtual void InitializeAttributes();
 
 	virtual void AddStartupEffects();
+
+	void RemoveCharacterAbilities();
+
+	virtual void Die();
 	
-public:
-
-	virtual void BeginPlay() override;
-
-	void Tracking(float InterpSpeed);
-
-	// Implement IAbilitySystemInterface
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
-	ATiAiCharacter();
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Animation")
+	UAnimMontage* DeathMontage;
 	
+
 };

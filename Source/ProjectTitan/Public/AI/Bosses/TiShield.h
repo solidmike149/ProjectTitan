@@ -34,4 +34,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBoxComponent* WeakPoint;
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ChangeStatus(bool IsVulnerable);
 };

@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilitySystem/Abilities/TiGA_Moveset.h"
+#include "AI/TiAttackSortingComponent.h"
 
-
-UTiGA_Moveset::UTiGA_Moveset()
+// Sets default values for this component's properties
+UTiAttackSortingComponent::UTiAttackSortingComponent()
 {
 	ComboWindow = 0.5;
 }
 
-void UTiGA_Moveset::IncrementScoreByCurve(int32 AttackIndex, float Distance, FAttackData& OutAttack)
+void UTiAttackSortingComponent::IncrementScoreByCurve(int32 AttackIndex, float Distance, FAttack& OutAttack)
 {
-	FAttackData& Attack = AttackDatas[AttackIndex];
+	FAttack& Attack = AttackDatas[AttackIndex];
 	
 	FRuntimeFloatCurve Curve = Attack.DistanceCurve;
 
@@ -27,14 +27,14 @@ void UTiGA_Moveset::IncrementScoreByCurve(int32 AttackIndex, float Distance, FAt
 	}
 }
 
-void UTiGA_Moveset::ResetAttackScore(int32 AttackIndex, bool InCombo)
+void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex, bool InCombo)
 {
-	FComboData ActiveCombo = AttackDatas[AttackIndex].ComboData;
+	FCombo ActiveCombo = AttackDatas[AttackIndex].ComboData;
 	
 	if (!InCombo)
 	{
 		int32 Index = 0;
-		for (FAttackData& Attack : AttackDatas)
+		for (FAttack& Attack : AttackDatas)
 		{
 			if (Index == AttackIndex)
 			{
@@ -60,7 +60,7 @@ void UTiGA_Moveset::ResetAttackScore(int32 AttackIndex, bool InCombo)
 	{
 		int32 Index = 0;
 		
-		for (FAttackData& Attack : AttackDatas)
+		for (FAttack& Attack : AttackDatas)
 		{
 			if (Index == AttackIndex)
 			{
@@ -77,3 +77,17 @@ void UTiGA_Moveset::ResetAttackScore(int32 AttackIndex, bool InCombo)
 		}
 	}
 }
+
+FGameplayTag UTiAttackSortingComponent::ConvertIndexToTag(int32 AttackIndex)
+{
+	FString BaseString = "Ability.Melee.Attack";
+
+	FString IndexString = FString::FromInt(AttackIndex);
+
+	FString Result = BaseString + IndexString;
+
+	FName OutName = FName(*Result);
+
+	return FGameplayTag::RequestGameplayTag(OutName);
+}
+
