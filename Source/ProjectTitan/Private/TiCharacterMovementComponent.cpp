@@ -41,5 +41,3 @@ void UTiCharacterMovementComponent::StopSprinting()
 {
 	RequestToStartSprinting = false;
 }
-
-
