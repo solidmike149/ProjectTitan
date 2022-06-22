@@ -7,6 +7,7 @@
 #include "TiAbilitySystemComponent.generated.h"
 
 
+class UTiGameplayAbility;
 /**
  * 
  */
@@ -14,4 +15,9 @@ UCLASS()
 class PROJECTTITAN_API UTiAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
+	
+	
+	bool IsAbilityActive(const FGameplayTagContainer* WithTags, const FGameplayTagContainer* WithoutTags, UGameplayAbility* Ignore);
+	
+	bool IsAbilityActive(const FGameplayAbilitySpecHandle& InHandle);
 };

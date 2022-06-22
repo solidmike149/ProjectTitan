@@ -6,4 +6,6 @@
 UTiGameplayAbility::UTiGameplayAbility()
 {
 	ReplicationPolicy = EGameplayAbilityReplicationPolicy::ReplicateNo;
+
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
