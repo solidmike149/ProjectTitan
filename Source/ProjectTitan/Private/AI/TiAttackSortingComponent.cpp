@@ -3,6 +3,8 @@
 
 #include "AI/TiAttackSortingComponent.h"
 
+#include "AI/TiAIControllerBase.h"
+
 // Sets default values for this component's properties
 UTiAttackSortingComponent::UTiAttackSortingComponent()
 {
@@ -27,54 +29,59 @@ void UTiAttackSortingComponent::IncrementScoreByCurve(int32 AttackIndex, float D
 	}
 }
 
-void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex, bool InCombo)
+void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex)
 {
 	FCombo ActiveCombo = AttackDatas[AttackIndex].ComboData;
-	
-	if (!InCombo)
-	{
-		int32 Index = 0;
-		for (FAttack& Attack : AttackDatas)
-		{
-			if (Index == AttackIndex)
-			{
-				Attack.Score -= Attack.DecrementScoreExecuted;
-			}
-			
-			else if (Index == ActiveCombo.Index)
-			{
-				Attack.Score += ActiveCombo.IncrementScore;
-			}
-			
-			else
-			{
-				Attack.Score -= Attack.DecrementScoreBase;
-			}
 
-			Attack.Score = FMath::Clamp(Attack.Score, -1.0f, 1.0f);
-			Index ++;
-		}	
-	}
-	
-	else
+	ATiAIControllerBase* AIController = Cast<ATiAIControllerBase>(GetOwner());
+
+	if(AIController)
 	{
-		int32 Index = 0;
-		
-		for (FAttack& Attack : AttackDatas)
+		if (AIController->bIsInComboCpp)
 		{
-			if (Index == AttackIndex)
+			int32 Index = 0;
+			for (FAttack& Attack : AttackDatas)
 			{
-				Attack.Score -= Attack.DecrementScoreExecuted;
-			}
+				if (Index == AttackIndex)
+				{
+					Attack.Score -= Attack.DecrementScoreExecuted;
+				}
 			
-			else if(Index == ActiveCombo.Index)
-			{
-				Attack.Score += ActiveCombo.IncrementScore;
-			}
+				else if (Index == ActiveCombo.Index)
+				{
+					Attack.Score += ActiveCombo.IncrementScore;
+				}
 			
-			Attack.Score = FMath::Clamp(Attack.Score, -1.0f, 1.0f);
-			Index ++;
+				else
+				{
+					Attack.Score -= Attack.DecrementScoreBase;
+				}
+
+				Attack.Score = FMath::Clamp(Attack.Score, -1.0f, 1.0f);
+				Index ++;
+			}	
 		}
+	
+		else
+		{
+			int32 Index = 0;
+		
+			for (FAttack& Attack : AttackDatas)
+			{
+				if (Index == AttackIndex)
+				{
+					Attack.Score -= Attack.DecrementScoreExecuted;
+				}
+			
+				else if(Index == ActiveCombo.Index)
+				{
+					Attack.Score += ActiveCombo.IncrementScore;
+				}
+			
+				Attack.Score = FMath::Clamp(Attack.Score, -1.0f, 1.0f);
+				Index ++;
+			}
+		}	
 	}
 }
 

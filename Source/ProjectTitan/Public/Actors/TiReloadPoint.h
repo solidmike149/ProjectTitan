@@ -14,7 +14,7 @@ class PROJECTTITAN_API ATiReloadPoint : public AActor
 	
 protected:
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBoxComponent* BoxComp;
 	
 	UPROPERTY(VisibleAnywhere)

@@ -89,7 +89,7 @@ public:
 	void IncrementScoreByCurve(int32 AttackIndex ,float Distance, FAttack& OutAttack);
 
 	UFUNCTION(BlueprintCallable)
-	void ResetAttackScore(int32 AttackIndex, bool InCombo);
+	void ResetAttackScore(int32 AttackIndex);
 
 	UFUNCTION(BlueprintCallable)
 	FGameplayTag ConvertIndexToTag(int32 AttackIndex);

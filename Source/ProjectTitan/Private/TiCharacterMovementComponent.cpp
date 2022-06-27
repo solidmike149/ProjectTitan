@@ -3,6 +3,8 @@
 
 #include "TiCharacterMovementComponent.h"
 
+#include "AbilitySystemComponent.h"
+#include "GameplayTagContainer.h"
 #include "TiCharacter.h"
 
 UTiCharacterMovementComponent::UTiCharacterMovementComponent()
@@ -17,6 +19,11 @@ float UTiCharacterMovementComponent::GetMaxSpeed() const
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s() No Owner"), *FString(__FUNCTION__));
 		return Super::GetMaxSpeed();
+	}
+
+	if (Owner->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Aim"))))
+	{
+		return 0.0f;
 	}
 
 	if (!Owner->IsAlive())
