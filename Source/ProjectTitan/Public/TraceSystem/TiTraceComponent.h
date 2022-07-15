@@ -73,5 +73,5 @@ public:
 	bool bDebugTraces;
 
 	UFUNCTION(BlueprintCallable)
-	void TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComponent, FGameplayTag EventTag, FHitResult& OutHit);
+	void TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComponent, FGameplayTag EventTag, float DeltaTime, FHitResult& OutHit);
 };

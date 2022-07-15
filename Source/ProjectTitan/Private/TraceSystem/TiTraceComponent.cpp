@@ -9,7 +9,7 @@
 
 UTiTraceComponent::UTiTraceComponent()
 {
-	bDebugTraces = false;
+	bDebugTraces = false;\
 }
 
 
@@ -20,7 +20,7 @@ void UTiTraceComponent::BeginPlay()
 
 
 void UTiTraceComponent::TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComponent, FGameplayTag EventTag,
-	FHitResult& OutHit)
+                                        float DeltaTime, FHitResult& OutHit)
 {
 	FTracesWrapper* Datas = Traces.Find(EventTag);
 	
@@ -49,7 +49,7 @@ void UTiTraceComponent::TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComp
 				if (bDebugTraces)
 				{
 					DebugCenterLocation = StartLocation + (Rotation.Vector() * Trace.BoxExtent.X / 2);
-					DrawDebugBox(World, DebugCenterLocation, Trace.BoxExtent, Rotation, FColor::Red, false, 0.01);
+					DrawDebugBox(World, DebugCenterLocation, Trace.BoxExtent, Rotation, FColor::Red, false, DeltaTime);
 				}
 				break;
 				
@@ -59,7 +59,7 @@ void UTiTraceComponent::TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComp
 				{
 					
 				}
-				DrawDebugSphere(World, StartLocation, Trace.SphereRadius, 16, FColor::Red, false, 0.01);
+				DrawDebugSphere(World, StartLocation, Trace.SphereRadius, 16, FColor::Red, false, DeltaTime);
 				break;
 				
 			case ETraceShape::Capsule:
@@ -68,7 +68,7 @@ void UTiTraceComponent::TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComp
 				{
 					EndLocation = StartLocation + (Rotation.Vector() * Trace.CapsuleHalfHeight);
 					DebugCenterLocation = StartLocation + (Rotation.Vector() * Trace.CapsuleHalfHeight / 2);
-					DrawDebugCapsule(World, StartLocation, Trace.CapsuleHalfHeight, Trace.CapsuleRadius, Rotation, FColor::Red, false, 0.01);
+					DrawDebugCapsule(World, StartLocation, Trace.CapsuleHalfHeight, Trace.CapsuleRadius, Rotation, FColor::Red, false, DeltaTime);
 				}
 				break;
 			}
