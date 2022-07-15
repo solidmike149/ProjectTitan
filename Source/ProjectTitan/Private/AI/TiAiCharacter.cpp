@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/TiAbilitySystemComponent.h"
 #include "AbilitySystem/TiGameplayAbility.h"
+#include "AbilitySystem/AttributeSets/TiHealthSet.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -31,6 +32,8 @@ ATiAiCharacter::ATiAiCharacter()
 
 	TargetWidget = CreateDefaultSubobject<UWidgetComponent>("TargetWidget");
 	TargetWidget->SetupAttachment(GetMesh());
+
+	HealthSet = CreateDefaultSubobject<UTiHealthSet>("HealthSet");
 }
 
 void ATiAiCharacter::BeginPlay()

@@ -7,7 +7,6 @@
 #include "Abilities/GameplayAbilityTargetActor.h"
 #include "AbilitySystem/TiAbilitySystemComponent.h"
 #include "AbilitySystem/TiGameplayAbility.h"
-#include "AbilitySystem/AttributeSets/TiAttributeSet_Player.h"
 #include "AbilitySystem/AttributeSets/TiHealthSet.h"
 #include "AbilitySystem/AttributeSets/TiPlayerSet.h"
 #include "Camera/CameraComponent.h"

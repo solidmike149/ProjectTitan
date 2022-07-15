@@ -8,6 +8,7 @@
 #include "Interfaces/TiTargetInterface.h"
 #include "TiAiCharacter.generated.h"
 
+class UTiHealthSet;
 class UGameplayEffect;
 class UTiGameplayAbility;
 class UTiAbilitySystemComponent;
@@ -28,6 +29,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	UTiAbilitySystemComponent* AbilitySystemComponent;
+
+	UPROPERTY()
+	UTiHealthSet* HealthSet;
 
 	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
