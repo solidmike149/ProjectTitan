@@ -18,7 +18,8 @@ public class ProjectTitan : ModuleRules
 			"GameplayTasks",
 			"AIModule",
 			"NavigationSystem",
-			"UMG"
+			"UMG",
+			"Niagara"
 		});
 	}
 }

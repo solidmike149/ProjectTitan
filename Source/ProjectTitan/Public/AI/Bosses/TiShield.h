@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
 #include "TiShield.generated.h"
 
+class UTiTraceComponent;
 class UBoxComponent;
 UCLASS()
 class PROJECTTITAN_API ATiShield : public AActor
@@ -17,23 +19,26 @@ public:
 	ATiShield();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* MainMesh;
+	USkeletalMeshComponent* MainMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* RightCover;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* LeftCover;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	USceneComponent* TraceBegin;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	USceneComponent* TraceEnd;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBoxComponent* WeakPoint;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UTiTraceComponent* TraceComponent;
+
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void ChangeStatus(bool IsVulnerable);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ActivateTrace(FGameplayTag EventTag);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void DeactivateTrace();
 };

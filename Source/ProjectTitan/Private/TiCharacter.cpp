@@ -8,6 +8,8 @@
 #include "AbilitySystem/TiAbilitySystemComponent.h"
 #include "AbilitySystem/TiGameplayAbility.h"
 #include "AbilitySystem/AttributeSets/TiAttributeSet_Player.h"
+#include "AbilitySystem/AttributeSets/TiHealthSet.h"
+#include "AbilitySystem/AttributeSets/TiPlayerSet.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
@@ -50,7 +52,9 @@ Super(ObjectInitializer.SetDefaultSubobjectClass<UTiCharacterMovementComponent>(
 
 	AbilitySystemComponent = CreateDefaultSubobject<UTiAbilitySystemComponent>("ActionComponent");
 
-	AttributeSet = CreateDefaultSubobject<UTiAttributeSet_Player>("AttributeSet");
+	HealthAttributeSet = CreateDefaultSubobject<UTiHealthSet>("HealthSet");
+
+	PlayerAttributeSet = CreateDefaultSubobject<UTiPlayerSet>("PlayerSet");
 }
 
 void ATiCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -152,6 +156,47 @@ void ATiCharacter::ShootReleased()
 	
 }
 
+void ATiCharacter::OnDeathStarted(AActor*)
+{
+	DisableMovementAndCollision();
+
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->CancelAllAbilities();
+	}
+}
+
+
+void ATiCharacter::OnDeathFinished(AActor*)
+{
+	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::DestroyDueToDeath);
+}
+
+
+void ATiCharacter::DisableMovementAndCollision()
+{
+	if (Controller)
+	{
+		Controller->SetIgnoreMoveInput(true);
+	}
+
+	UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
+	check(CapsuleComp);
+	CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	UTiCharacterMovementComponent* LyraMoveComp = CastChecked<UTiCharacterMovementComponent>(GetCharacterMovement());
+	LyraMoveComp->StopMovementImmediately();
+	LyraMoveComp->DisableMovement();
+}
+
+
+void ATiCharacter::DestroyDueToDeath()
+{
+	K2_OnDeathFinished();
+}
+
+
 void ATiCharacter::AddCharacterAbilities()
 {
 	for (TSubclassOf<UTiGameplayAbility>& StartupAbility : CharacterAbilities)
@@ -224,23 +269,8 @@ void ATiCharacter::RemoveCharacterAbilities()
 	{
 		AbilitySystemComponent->ClearAbility(AbilitiesToRemove[i]);
 	}
-
-	
 }
 
-void ATiCharacter::Die()
-{
-	RemoveCharacterAbilities();
-
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCharacterMovement()->GravityScale = 0;
-	GetCharacterMovement()->Velocity = FVector(0);
-
-	if (AbilitySystemComponent)
-	{
-		AbilitySystemComponent->CancelAllAbilities();
-	}
-}
 
 UAbilitySystemComponent* ATiCharacter::GetAbilitySystemComponent() const
 {
@@ -249,27 +279,27 @@ UAbilitySystemComponent* ATiCharacter::GetAbilitySystemComponent() const
 
 float ATiCharacter::GetMoveSpeed() const
 {
-	if (AttributeSet)
+	if (PlayerAttributeSet)
 	{
-		return AttributeSet->GetSpeed();
+		return PlayerAttributeSet->GetSpeed();
 	}
 	return 0.0f;
 }
 
 float ATiCharacter::GetMaxStamina() const
 {
-	if (AttributeSet)
+	if (PlayerAttributeSet)
 	{
-		return AttributeSet->GetMaxStamina();
+		return PlayerAttributeSet->GetMaxStamina();
 	}
 	return 0.0f;
 }
 
 float ATiCharacter::GetHealth() const
 {
-	if (AttributeSet)
+	if (HealthAttributeSet)
 	{
-		return AttributeSet->GetHealth();
+		return HealthAttributeSet->GetHealth();
 	}
 	return 0.0f;
 }

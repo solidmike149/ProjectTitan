@@ -4,12 +4,13 @@
 #include "AI/Bosses/TiShield.h"
 
 #include "Components/BoxComponent.h"
+#include "TraceSystem/TiTraceComponent.h"
 
 // Sets default values
 ATiShield::ATiShield()
 {
 
-	MainMesh = CreateDefaultSubobject<UStaticMeshComponent>("MainMesh");
+	MainMesh = CreateDefaultSubobject<USkeletalMeshComponent>("MainMesh");
 	RootComponent = MainMesh;
 
 	RightCover = CreateDefaultSubobject<UStaticMeshComponent>("RightCover");
@@ -21,9 +22,5 @@ ATiShield::ATiShield()
 	WeakPoint = CreateDefaultSubobject<UBoxComponent>("WeakPoint");
 	WeakPoint->SetupAttachment(RootComponent);
 
-	TraceBegin = CreateDefaultSubobject<USceneComponent>("TraceBegin");
-	TraceBegin->SetupAttachment(RootComponent);
-
-	TraceEnd = CreateDefaultSubobject<USceneComponent>("TraceEnd");
-	TraceEnd->SetupAttachment(RootComponent);
+	TraceComponent = CreateDefaultSubobject<UTiTraceComponent>("TraceComponent");
 }

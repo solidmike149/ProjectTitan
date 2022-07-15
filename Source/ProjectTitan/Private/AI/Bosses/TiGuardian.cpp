@@ -3,3 +3,8 @@
 
 #include "AI/Bosses/TiGuardian.h"
 
+
+ATiGuardian::ATiGuardian()
+{
+	
+}

@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "TiProjectileBase.generated.h"
 
+class UNiagaraComponent;
 class USphereComponent;
 class UProjectileMovementComponent;
 
@@ -27,6 +28,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	UParticleSystemComponent* ParticleComp;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UNiagaraComponent* NiagaraComponent;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	USphereComponent* SphereComponent;

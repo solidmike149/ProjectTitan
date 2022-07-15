@@ -7,6 +7,8 @@
 #include "GameFramework/Character.h"
 #include "TiCharacter.generated.h"
 
+class UTiPlayerSet;
+class UTiHealthSet;
 class UTiAttributeSet_Player;
 class UGameplayEffect;
 class UTiGameplayAbility;
@@ -14,6 +16,7 @@ class UTiAbilitySystemComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class UWidgetComponent;
+
 UCLASS()
 class PROJECTTITAN_API ATiCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -36,7 +39,10 @@ protected:
 	UTiAbilitySystemComponent* AbilitySystemComponent;
 	
 	UPROPERTY()
-	UTiAttributeSet_Player* AttributeSet;
+	UTiHealthSet* HealthAttributeSet;
+
+	UPROPERTY()
+	UTiPlayerSet* PlayerAttributeSet;
 
 	virtual void BeginPlay() override;
 	
@@ -76,10 +82,29 @@ protected:
 
 	virtual void AddStartupEffects();
 
+	// Begins the death sequence for the character (disables collision, disables movement, etc...)
+	UFUNCTION()
+	virtual void OnDeathStarted(AActor* OwningActor);
+
+	// Ends the death sequence for the character (detaches controller, destroys pawn, etc...)
+	UFUNCTION()
+	virtual void OnDeathFinished(AActor* OwningActor);
+
+	void DisableMovementAndCollision();
+	
+	void DestroyDueToDeath();
+	
+	// Called when the death sequence for the character has completed
+	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnDeathFinished"))
+	void K2_OnDeathFinished();
+	
 public:
 
 	// Implement IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
+	void GetDamage();
 
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	float GetMoveSpeed() const;
@@ -94,8 +119,6 @@ public:
 	bool IsAlive() const;
 
 	void RemoveCharacterAbilities();
-
-	virtual void Die();
 	
 	UPROPERTY(BlueprintReadWrite)
 	TArray<AActor*> Targets;

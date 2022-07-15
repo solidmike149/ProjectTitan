@@ -3,9 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "AI/TiAiCharacter.h"
 #include "TiGuardian.generated.h"
 
+
+
+class UTiTraceComponent;
 class ATiShield;
 /**
  * 
@@ -15,6 +19,10 @@ class PROJECTTITAN_API ATiGuardian : public ATiAiCharacter
 {
 	GENERATED_BODY()
 
+protected:
+
+
+
 public:
 
 	UPROPERTY(BlueprintReadWrite)
@@ -22,4 +30,6 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void GetShield();
+
+	ATiGuardian();
 };
