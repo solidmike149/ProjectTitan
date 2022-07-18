@@ -23,6 +23,7 @@ struct FTraceData
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ETraceShape Shape;
 
+	/* The socket from which we originate the trace */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName SocketName;
 
@@ -59,10 +60,6 @@ public:
 
 protected:
 
-	virtual void BeginPlay() override;
-
-public:
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Traces")
 	TMap<FGameplayTag, FTracesWrapper> Traces;
 
@@ -72,6 +69,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Traces")
 	bool bDebugTraces;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Traces", meta = (EditCondition = "bDebugTraces", EditConditionHides))
+	float TraceDuration;
+
 	UFUNCTION(BlueprintCallable)
-	void TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComponent, FGameplayTag EventTag, float DeltaTime, FHitResult& OutHit);
+	void TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComponent, FGameplayTag EventTag, FHitResult& OutHit);
 };
