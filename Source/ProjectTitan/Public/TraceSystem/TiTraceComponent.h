@@ -44,7 +44,7 @@ struct FTracesWrapper
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (TitleProperty = "SocketName"))
 	TArray<FTraceData> Traces;
 };
 

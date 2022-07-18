@@ -63,10 +63,10 @@ void ATiCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATiCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATiCharacter::MoveRight);
 
-	PlayerInputComponent->BindAction("Shoot",IE_Pressed, this, &ATiCharacter::ShootPressed);
-	PlayerInputComponent->BindAction("Shoot",IE_Released, this, &ATiCharacter::ShootReleased);
+	//PlayerInputComponent->BindAction("Shoot",IE_Pressed, this, &ATiCharacter::ShootPressed);
+	//PlayerInputComponent->BindAction("Shoot",IE_Released, this, &ATiCharacter::ShootReleased);
 	
-	PlayerInputComponent->BindAction("Roll",IE_Pressed, this, &ATiCharacter::Roll);
+	//PlayerInputComponent->BindAction("Roll",IE_Pressed, this, &ATiCharacter::Roll);
 
 	BindASCInput();
 
@@ -81,6 +81,11 @@ void ATiCharacter::BindASCInput()
 		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"),
 			FString("CancelTarget"), FString("ETiAbilityInputID"), static_cast<int32>(ETiAbilityInputID::Confirm), static_cast<int32>(ETiAbilityInputID::Cancel)));
 	}
+}
+
+void ATiCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 }
 
 void ATiCharacter::BeginPlay()
@@ -98,6 +103,7 @@ void ATiCharacter::BeginPlay()
 		AddCharacterAbilities();
 	}
 }
+
 
 void ATiCharacter::MoveForward(float Value)
 {
@@ -123,15 +129,6 @@ void ATiCharacter::MoveRight(float Value)
 	AddMovementInput(Direction, Value);
 }
 
-void ATiCharacter::SprintStart()
-{
-
-}
-
-void ATiCharacter::SprintStop()
-{
-
-}
 
 void ATiCharacter::Roll()
 {
@@ -145,15 +142,6 @@ void ATiCharacter::Roll()
 	}
 }
 
-void ATiCharacter::ShootPressed()
-{
-	
-}
-
-void ATiCharacter::ShootReleased()
-{
-	
-}
 
 void ATiCharacter::OnDeathStarted(AActor*)
 {

@@ -9,7 +9,6 @@
 
 class UTiPlayerSet;
 class UTiHealthSet;
-class UTiAttributeSet_Player;
 class UGameplayEffect;
 class UTiGameplayAbility;
 class UTiAbilitySystemComponent;
@@ -43,25 +42,17 @@ protected:
 
 	UPROPERTY()
 	UTiPlayerSet* PlayerAttributeSet;
-
-	virtual void BeginPlay() override;
 	
+	virtual void PostInitializeComponents() override;
+	
+	virtual void BeginPlay() override;
+
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
 
-	void SprintStart();
-
-	void SprintStop();
-
 	UFUNCTION()
 	void Roll();
-
-	UFUNCTION()
-	void ShootPressed();
-
-	UFUNCTION()
-	void ShootReleased();
 
 	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
