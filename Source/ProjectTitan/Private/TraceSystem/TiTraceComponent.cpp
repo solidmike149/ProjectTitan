@@ -76,8 +76,12 @@ void UTiTraceComponent::TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComp
 			{
 				//TODO Use Attribute
 				OutHit = Hit;
-				Cast<ATiCharacter>(Hit.GetActor())->GetDamage();
-				break;
+				ATiCharacter* Character =  Cast<ATiCharacter>(Hit.GetActor());
+				if(Character)
+				{
+					Character->GetDamage();
+					break;
+				}
 			}
 		}
 	}
