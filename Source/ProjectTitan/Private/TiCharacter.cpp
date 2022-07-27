@@ -86,6 +86,8 @@ void ATiCharacter::BindASCInput()
 void ATiCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	HealthAttributeSet->OnOutOfHealth.AddUObject(this, &ATiCharacter::OnDeathStarted);
 }
 
 void ATiCharacter::BeginPlay()
@@ -143,7 +145,7 @@ void ATiCharacter::Roll()
 }
 
 
-void ATiCharacter::OnDeathStarted(AActor*)
+void ATiCharacter::OnDeathStarted(AActor* EffectInstigator, AActor* EffectCauser, const FGameplayEffectSpec& EffectSpec, float EffectMagnitude)
 {
 	DisableMovementAndCollision();
 
@@ -172,9 +174,9 @@ void ATiCharacter::DisableMovementAndCollision()
 	CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-	UTiCharacterMovementComponent* LyraMoveComp = CastChecked<UTiCharacterMovementComponent>(GetCharacterMovement());
-	LyraMoveComp->StopMovementImmediately();
-	LyraMoveComp->DisableMovement();
+	UTiCharacterMovementComponent* MoveComp = CastChecked<UTiCharacterMovementComponent>(GetCharacterMovement());
+	MoveComp->StopMovementImmediately();
+	MoveComp->DisableMovement();
 }
 
 

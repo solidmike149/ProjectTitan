@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayEffect.h"
 #include "GameFramework/Character.h"
 #include "TiCharacter.generated.h"
 
@@ -73,9 +74,11 @@ protected:
 
 	virtual void AddStartupEffects();
 
+	void RemoveCharacterAbilities();
+
 	// Begins the death sequence for the character (disables collision, disables movement, etc...)
 	UFUNCTION()
-	virtual void OnDeathStarted(AActor* OwningActor);
+	virtual void OnDeathStarted(AActor* EffectInstigator, AActor* EffectCauser, const FGameplayEffectSpec& EffectSpec, float EffectMagnitude);
 
 	// Ends the death sequence for the character (detaches controller, destroys pawn, etc...)
 	UFUNCTION()
@@ -108,8 +111,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsAlive() const;
-
-	void RemoveCharacterAbilities();
 	
 	UPROPERTY(BlueprintReadWrite)
 	TArray<AActor*> Targets;

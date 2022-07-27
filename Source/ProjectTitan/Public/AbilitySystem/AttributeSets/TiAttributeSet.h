@@ -27,7 +27,7 @@
 
 class UTiAbilitySystemComponent;
 // Delegate used to broadcast attribute events.
-DECLARE_MULTICAST_DELEGATE_FourParams(FLyraAttributeEvent, AActor* /*EffectInstigator*/, AActor* /*EffectCauser*/, const FGameplayEffectSpec& /*EffectSpec*/, float /*EffectMagnitude*/);
+DECLARE_MULTICAST_DELEGATE_FourParams(FTiAttributeEvent, AActor* /*EffectInstigator*/, AActor* /*EffectCauser*/, const FGameplayEffectSpec& /*EffectSpec*/, float /*EffectMagnitude*/);
 
 
 /**

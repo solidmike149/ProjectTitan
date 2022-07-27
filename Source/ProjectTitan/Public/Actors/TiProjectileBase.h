@@ -20,7 +20,7 @@ public:
 
 	ATiProjectileBase();
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Meta = (ExposeOnSpawn = true))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Meta = (ExposeOnSpawn = true), Category = "Range")
 	float Range;
 
 	UPROPERTY(BlueprintReadWrite, Meta = (ExposeOnSpawn = true))

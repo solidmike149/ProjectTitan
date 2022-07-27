@@ -3,6 +3,8 @@
 
 #include "TraceSystem/TiTraceComponent.h"
 
+#include "AbilitySystemComponent.h"
+#include "AbilitySystemGlobals.h"
 #include "DrawDebugHelpers.h"
 #include "TiCharacter.h"
 
@@ -15,8 +17,38 @@ UTiTraceComponent::UTiTraceComponent()
 }
 
 
-void UTiTraceComponent::TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComponent, FGameplayTag EventTag,
-										FHitResult& OutHit)
+void UTiTraceComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SkeletalMeshComp = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
+
+	UAbilitySystemComponent* ASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(GetOwner(), false);
+}
+
+void UTiTraceComponent::ActivateTrace(FGameplayTag EventTag)
+{
+	FTimerDelegate Delegate;
+
+	Delegate.BindUFunction(this, "ActualTrace", EventTag);
+
+	FTracesWrapper* Data = Traces.Find(EventTag);
+
+	float Period = 0.0f;
+	if (Data)
+	{
+		Period = Data->Period;
+	}
+	
+	GetWorld()->GetTimerManager().SetTimer(TraceHandle, Delegate, Period, true);
+}
+
+void UTiTraceComponent::DeactivateTrace()
+{
+	TraceHandle.Invalidate();
+}
+
+void UTiTraceComponent::ActualTrace(FGameplayTag EventTag)
 {
 	FTracesWrapper* Datas = Traces.Find(EventTag);
 	
@@ -26,62 +58,78 @@ void UTiTraceComponent::TraceByEventTag(USkeletalMeshComponent* SkeletalMeshComp
 		
 		for (const FTraceData& Trace : TraceArray)
 		{
-			FCollisionShape Shape;
+			FName SocketName = Trace.SocketName;
 			
-			FHitResult Hit;
-			FVector StartLocation = SkeletalMeshComponent->GetSocketLocation(Trace.SocketName);
-			FVector EndLocation;
-			FQuat Rotation = SkeletalMeshComponent->GetSocketQuaternion(Trace.SocketName);
-			FVector DebugCenterLocation;
-			FCollisionObjectQueryParams ObjectQueryParams;
-
+			FVector StartLocation = SkeletalMeshComp->GetSocketLocation(SocketName);
+			FQuat Rotation = SkeletalMeshComp->GetSocketQuaternion(SocketName);
 			UWorld* World = GetWorld();
 
-			switch (Trace.Shape)
+			if (Trace.Shape != ETraceShape::Remote)
 			{
-			case ETraceShape::Box:
-				Shape.SetBox(Trace.BoxExtent);
-				EndLocation = StartLocation + (Rotation.Vector() * Trace.BoxExtent.X);
-				if (bDebugTraces)
-				{
-					DebugCenterLocation = StartLocation + (Rotation.Vector() * Trace.BoxExtent.X / 2);
-					DrawDebugBox(World, DebugCenterLocation, Trace.BoxExtent, Rotation, FColor::Red, false, TraceDuration);
-				}
-				break;
-				
-			case ETraceShape::Sphere:
-				Shape.SetSphere(Trace.SphereRadius);
-				if (bDebugTraces)
-				{
-					DrawDebugSphere(World, StartLocation, Trace.SphereRadius, 16, FColor::Red, false, TraceDuration);
-				}
-				break;
-				
-			case ETraceShape::Capsule:
-				Shape.SetCapsule(Trace.CapsuleRadius, Trace.CapsuleHalfHeight);
-				if (bDebugTraces)
-				{
-					EndLocation = StartLocation + (Rotation.Vector() * Trace.CapsuleHalfHeight);
-					DebugCenterLocation = StartLocation + (Rotation.Vector() * Trace.CapsuleHalfHeight / 2);
-					DrawDebugCapsule(World, StartLocation, Trace.CapsuleHalfHeight, Trace.CapsuleRadius, Rotation, FColor::Red, false, TraceDuration);
-				}
-				break;
-			}
+				FCollisionShape Shape;
 			
-			
-			ObjectQueryParams.AddObjectTypesToQuery(CollisionChannel);
-			World->SweepSingleByObjectType(Hit , StartLocation, EndLocation, Rotation, ObjectQueryParams, Shape);
-
-			if(Hit.bBlockingHit)
-			{
-				//TODO Use Attribute
-				OutHit = Hit;
-				ATiCharacter* Character =  Cast<ATiCharacter>(Hit.GetActor());
-				if(Character)
+				FHitResult Hit;
+				
+				FVector EndLocation;
+				
+				FVector DebugCenterLocation;
+				FCollisionObjectQueryParams ObjectQueryParams;
+				
+				switch (Trace.Shape)
 				{
-					Character->GetDamage();
+				case ETraceShape::Box:
+					Shape.SetBox(Trace.BoxExtent);
+					EndLocation = StartLocation + (Rotation.Vector() * Trace.BoxExtent.X);
+					if (bDebugTraces)
+					{
+						DebugCenterLocation = StartLocation + (Rotation.Vector() * Trace.BoxExtent.X / 2);
+						DrawDebugBox(World, DebugCenterLocation, Trace.BoxExtent, Rotation, FColor::Red, false, TraceDuration);
+					}
+					break;
+				
+				case ETraceShape::Sphere:
+					Shape.SetSphere(Trace.SphereRadius);
+					if (bDebugTraces)
+					{
+						DrawDebugSphere(World, StartLocation, Trace.SphereRadius, 16, FColor::Red, false, TraceDuration);
+					}
+					break;
+				
+				case ETraceShape::Capsule:
+					Shape.SetCapsule(Trace.CapsuleRadius, Trace.CapsuleHalfHeight);
+					if (bDebugTraces)
+					{
+						EndLocation = StartLocation + (Rotation.Vector() * Trace.CapsuleHalfHeight);
+						DebugCenterLocation = StartLocation + (Rotation.Vector() * Trace.CapsuleHalfHeight / 2);
+						DrawDebugCapsule(World, StartLocation, Trace.CapsuleHalfHeight, Trace.CapsuleRadius, Rotation, FColor::Red, false, TraceDuration);
+					}
+					break;
+					
+				default:
+					UE_LOG(LogTemp, Warning, TEXT("Case Undefined"))
 					break;
 				}
+				
+				ObjectQueryParams.AddObjectTypesToQuery(CollisionChannel);
+				World->SweepSingleByObjectType(Hit , StartLocation, EndLocation, Rotation, ObjectQueryParams, Shape);
+
+				if(Hit.bBlockingHit)
+				{
+					UAbilitySystemComponent* ASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(Hit.GetActor());
+					if (ASC)
+					{
+						ASC->BP_ApplyGameplayEffectToSelf(DamageEffect, 1, FGameplayEffectContextHandle());
+						break;
+					}
+				}
+			}
+			
+			else
+			{
+				FActorSpawnParameters SpawnParams;
+				FTransform SpawnTransform = FTransform(Rotation, StartLocation);
+				
+				World->SpawnActor<AActor>(Trace.RemoteTraceClass, SpawnTransform, SpawnParams);
 			}
 		}
 	}

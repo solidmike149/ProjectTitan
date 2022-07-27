@@ -22,7 +22,7 @@ public:
 	ATTRIBUTE_ACCESSORS(UTiHealthSet, MaxHealth);
 
 	// Delegate to broadcast when the health attribute reaches zero.
-	FLyraAttributeEvent OnOutOfHealth;
+	FTiAttributeEvent OnOutOfHealth;
 
 protected:
 	
