@@ -18,6 +18,9 @@ class PROJECTTITAN_API ATiRemoteTrace : public AActor
 public:
 
 	ATiRemoteTrace();
+
+	UPROPERTY(EditAnywhere)
+	float Duration;
 	
 protected:
 
@@ -29,12 +32,14 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UProjectileMovementComponent* ProjectileMovementComponent;
-
+	
 	virtual void PostInitializeComponents() override;
+
+	virtual void BeginPlay() override;
 
 	UFUNCTION()
 	virtual void OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable ,BlueprintImplementableEvent)
 	void ApplyDamage(AActor* ActorToDamage);
 };

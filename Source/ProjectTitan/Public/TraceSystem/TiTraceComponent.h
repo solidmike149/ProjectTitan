@@ -14,8 +14,7 @@ enum class ETraceShape : uint8
 {
 	Box,
 	Sphere,
-	Capsule,
-	Remote
+	Capsule
 };
 
 USTRUCT(BlueprintType)
@@ -41,13 +40,24 @@ struct FTraceData
 
 	UPROPERTY(EditAnywhere, meta = (EditCondition= "Shape==ETraceShape::Box", EditConditionHides))
 	FVector BoxExtent;
+};
 
-	UPROPERTY(EditAnywhere, meta = (EditCondition= "Shape==ETraceShape::Remote", EditConditionHides))
+
+USTRUCT(BlueprintType)
+struct FRemoteTrace
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+	FName SocketName;
+
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<ATiRemoteTrace> RemoteTraceClass;
 
-	UPROPERTY(EditAnywhere, meta = (EditCondition= "Shape==ETraceShape::Remote", EditConditionHides))
+	UPROPERTY(EditAnywhere)
 	float Range;
 };
+
 
 USTRUCT(BlueprintType)
 struct FTracesWrapper
@@ -57,9 +67,14 @@ struct FTracesWrapper
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (TitleProperty = "SocketName"))
 	TArray<FTraceData> Traces;
 
+	/* Time between 'ticks' to draw Traces */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Period = 0.01 ;
+	float Period = 0.01;
+
+	UPROPERTY(EditAnywhere)
+	FRemoteTrace RemoteTrace;
 };
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTTITAN_API UTiTraceComponent : public UActorComponent
@@ -101,5 +116,5 @@ protected:
 	void DeactivateTrace();
 
 	UFUNCTION()
-	void ActualTrace(FGameplayTag EventTag);
+	void TraceElapsed(TArray<FTraceData>& TraceArray);
 };

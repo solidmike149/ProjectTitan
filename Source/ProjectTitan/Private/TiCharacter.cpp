@@ -153,12 +153,8 @@ void ATiCharacter::OnDeathStarted(AActor* EffectInstigator, AActor* EffectCauser
 	{
 		AbilitySystemComponent->CancelAllAbilities();
 	}
-}
 
-
-void ATiCharacter::OnDeathFinished(AActor*)
-{
-	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::DestroyDueToDeath);
+	K2_OnDeathFinished();
 }
 
 
@@ -177,12 +173,6 @@ void ATiCharacter::DisableMovementAndCollision()
 	UTiCharacterMovementComponent* MoveComp = CastChecked<UTiCharacterMovementComponent>(GetCharacterMovement());
 	MoveComp->StopMovementImmediately();
 	MoveComp->DisableMovement();
-}
-
-
-void ATiCharacter::DestroyDueToDeath()
-{
-	K2_OnDeathFinished();
 }
 
 

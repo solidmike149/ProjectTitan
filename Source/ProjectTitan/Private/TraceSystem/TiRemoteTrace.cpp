@@ -29,21 +29,29 @@ void ATiRemoteTrace::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	TArray<UPrimitiveComponent*> Collisions;
+	TArray<UShapeComponent*> Collisions;
 	
 	GetComponents(Collisions);
 
-	for (UPrimitiveComponent* Collision : Collisions)
+	for (UShapeComponent* Collision : Collisions)
 	{
 		if(Collision)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("%s : CollisionFound"), *this->GetFName().ToString())
 			Collision->OnComponentHit.AddDynamic(this, &ATiRemoteTrace::OnComponentHit);
 		}
 	}
 }
 
+void ATiRemoteTrace::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetLifeSpan(Duration);
+}
+
 void ATiRemoteTrace::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+                                    UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	ApplyDamage(OtherActor);
 

@@ -80,13 +80,7 @@ protected:
 	UFUNCTION()
 	virtual void OnDeathStarted(AActor* EffectInstigator, AActor* EffectCauser, const FGameplayEffectSpec& EffectSpec, float EffectMagnitude);
 
-	// Ends the death sequence for the character (detaches controller, destroys pawn, etc...)
-	UFUNCTION()
-	virtual void OnDeathFinished(AActor* OwningActor);
-
 	void DisableMovementAndCollision();
-	
-	void DestroyDueToDeath();
 	
 	// Called when the death sequence for the character has completed
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnDeathFinished"))
@@ -96,9 +90,6 @@ public:
 
 	// Implement IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
-	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
-	void GetDamage();
 
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	float GetMoveSpeed() const;
