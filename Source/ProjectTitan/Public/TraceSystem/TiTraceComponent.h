@@ -56,6 +56,9 @@ struct FRemoteTrace
 
 	UPROPERTY(EditAnywhere)
 	float Range;
+
+	UPROPERTY(EditAnywhere)
+	float Speed = 100;
 };
 
 

@@ -37,17 +37,15 @@ void UTiTraceComponent::ActivateTrace(FGameplayTag EventTag)
 			FName SocketName = RemoteTrace.SocketName;
 			
 			FVector StartLocation = SkeletalMeshComp->GetSocketLocation(SocketName);
-			FQuat Rotation = SkeletalMeshComp->GetSocketQuaternion(SocketName);
+			FRotator Rotation = FRotator(0.0f, SkeletalMeshComp->GetSocketRotation(SocketName).Yaw, 0.0f); ;
 			
 			FTransform SpawnTransform = FTransform(Rotation, StartLocation);
-
-			GetWorld()->SpawnActor<AActor>(RemoteTrace.RemoteTraceClass, SpawnTransform, FActorSpawnParameters());
-/*
+			
 			ATiRemoteTrace* RemoteTraceActor = GetWorld()->SpawnActorDeferred<ATiRemoteTrace>(RemoteTrace.RemoteTraceClass, SpawnTransform, GetOwner());
-			RemoteTraceActor->Duration = RemoteTrace.Range;
+			RemoteTraceActor->SetRange(RemoteTrace.Range);
+			RemoteTraceActor->SetSpeed(RemoteTrace.Speed);
 
 			RemoteTraceActor->FinishSpawning(SpawnTransform);
-			*/
 		}
 
 		if (Data->Traces.Num() > 0)

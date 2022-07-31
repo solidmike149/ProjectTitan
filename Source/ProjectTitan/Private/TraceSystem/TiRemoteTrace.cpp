@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemGlobals.h"
 #include "NiagaraComponent.h"
+#include "../../../../../../Program Files/Epic Games/UE_4.27/Engine/Plugins/Animation/RigLogic/Source/RigLogicLib/Public/pma/ScopedPtr.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -25,6 +26,8 @@ ATiRemoteTrace::ATiRemoteTrace()
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
 }
 
+
+
 void ATiRemoteTrace::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -35,9 +38,9 @@ void ATiRemoteTrace::PostInitializeComponents()
 
 	for (UShapeComponent* Collision : Collisions)
 	{
-		if(Collision)
+		if(Collision && Collision != SphereComponent)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s : CollisionFound"), *this->GetFName().ToString())
+			//UE_LOG(LogTemp, Warning, TEXT("%s : CollisionFound"), *this->GetFName().ToString())
 			Collision->OnComponentHit.AddDynamic(this, &ATiRemoteTrace::OnComponentHit);
 		}
 	}
@@ -47,7 +50,7 @@ void ATiRemoteTrace::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetLifeSpan(Duration);
+	SetLifeSpan(Range);
 }
 
 void ATiRemoteTrace::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
@@ -56,4 +59,14 @@ void ATiRemoteTrace::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* O
 	ApplyDamage(OtherActor);
 
 	SetLifeSpan(0.01f);
+}
+
+void ATiRemoteTrace::SetRange(float NewRange)
+{
+	Range = NewRange;
+}
+
+void ATiRemoteTrace::SetSpeed(float NewSpeed)
+{
+	ProjectileMovementComponent->InitialSpeed = NewSpeed;
 }

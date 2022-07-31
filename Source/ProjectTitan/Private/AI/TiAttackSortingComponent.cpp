@@ -23,7 +23,7 @@ void UTiAttackSortingComponent::IncrementScoreByCurve(int32 AttackIndex, float D
 
 		Attack.Score += AddingScore;
 		
-		Attack.Score = FMath::Clamp(Attack.Score, -1.0f, 1.0f);
+		Attack.Score = FMath::Clamp(Attack.Score, 0.0f, 1.0f);
 		
 		OutAttack = Attack;
 	}
@@ -57,7 +57,7 @@ void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex)
 					Attack.Score -= Attack.DecrementScoreBase;
 				}
 
-				Attack.Score = FMath::Clamp(Attack.Score, -1.0f, 1.0f);
+				Attack.Score = FMath::Clamp(Attack.Score, 0.0f, 1.0f);
 				Index ++;
 			}	
 		}
@@ -78,7 +78,7 @@ void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex)
 					Attack.Score += ActiveCombo.IncrementScore;
 				}
 			
-				Attack.Score = FMath::Clamp(Attack.Score, -1.0f, 1.0f);
+				Attack.Score = FMath::Clamp(Attack.Score, 0.0f, 1.0f);
 				Index ++;
 			}
 		}	

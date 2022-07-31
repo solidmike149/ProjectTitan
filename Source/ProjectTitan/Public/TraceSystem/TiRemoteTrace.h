@@ -18,9 +18,10 @@ class PROJECTTITAN_API ATiRemoteTrace : public AActor
 public:
 
 	ATiRemoteTrace();
+	
+	void SetRange(float NewRange);
 
-	UPROPERTY(EditAnywhere)
-	float Duration;
+	void SetSpeed(float NewSpeed);
 	
 protected:
 
@@ -32,6 +33,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UProjectileMovementComponent* ProjectileMovementComponent;
+	
+	float Range;
 	
 	virtual void PostInitializeComponents() override;
 
