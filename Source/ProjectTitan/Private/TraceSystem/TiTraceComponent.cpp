@@ -64,7 +64,7 @@ void UTiTraceComponent::ActivateTrace(FGameplayTag EventTag)
 
 void UTiTraceComponent::DeactivateTrace()
 {
-	TraceHandle.Invalidate();
+	GetWorld()->GetTimerManager().ClearTimer(TraceHandle);
 }
 
 
