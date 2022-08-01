@@ -5,7 +5,6 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
-#include "AI/TiAttackSortingComponent.h"
 
 UTiBTService_SortMovesByDistance::UTiBTService_SortMovesByDistance()
 {

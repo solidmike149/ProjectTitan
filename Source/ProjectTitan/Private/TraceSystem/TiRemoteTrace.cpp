@@ -6,7 +6,6 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemGlobals.h"
 #include "NiagaraComponent.h"
-#include "../../../../../../Program Files/Epic Games/UE_4.27/Engine/Plugins/Animation/RigLogic/Source/RigLogicLib/Public/pma/ScopedPtr.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
