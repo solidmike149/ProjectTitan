@@ -6,9 +6,10 @@
 #include "Blueprint/UserWidget.h"
 #include "TiDiary.generated.h"
 
-class UButton;
-class UListView;
+class UCommonListView;
 class UImage;
+class UButton;
+
 enum class EEntryCategory : uint8;
 /**
  * 
@@ -32,10 +33,10 @@ protected:
 	UImage* BackgroundImage;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UListView* CategoryList;
+	UCommonListView* CategoryList;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UListView* IndexList;
+	UCommonListView* IndexList;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* CloseButton;

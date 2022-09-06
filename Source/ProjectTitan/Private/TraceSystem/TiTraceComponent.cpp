@@ -90,7 +90,7 @@ void UTiTraceComponent::TraceElapsed(TArray<FTraceData>& TraceArray)
 		switch (Trace.Shape)
 		{
 		case ETraceShape::Box:
-			Shape.SetBox(Trace.BoxExtent);
+			Shape.SetBox(FVector3f(Trace.BoxExtent));
 			EndLocation = StartLocation + (Rotation.Vector() * Trace.BoxExtent.X);
 			if (bDebugTraces)
 			{

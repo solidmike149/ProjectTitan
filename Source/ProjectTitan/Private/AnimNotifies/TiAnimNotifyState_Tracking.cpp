@@ -8,9 +8,7 @@
 void UTiAnimNotifyState_Tracking::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
                                              float FrameDeltaTime)
 {
-	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
-
-	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
+	NotifyTick(MeshComp, Animation, FrameDeltaTime);
 
 	ATiAiCharacter* AICharacter = Cast<ATiAiCharacter>(MeshComp->GetOwner());
 

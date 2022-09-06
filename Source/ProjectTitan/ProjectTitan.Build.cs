@@ -19,7 +19,8 @@ public class ProjectTitan : ModuleRules
 			"AIModule",
 			"NavigationSystem",
 			"UMG",
-			"Niagara"
+			"Niagara",
+			"CommonUI"
 		});
 	}
 }
