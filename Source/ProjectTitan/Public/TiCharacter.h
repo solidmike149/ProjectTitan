@@ -33,7 +33,7 @@ protected:
 	USpringArmComponent* CameraBoom;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UWidgetComponent* Widget;
+	UWidgetComponent* AmmoWidget;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Abilities")
 	UTiAbilitySystemComponent* AbilitySystemComponent;

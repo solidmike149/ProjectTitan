@@ -6,6 +6,7 @@
 #include "TiCharacter.h"
 #include "TiConquistabot.generated.h"
 
+class UTiDiaryComponent;
 /**
  * 
  */
@@ -13,5 +14,11 @@ UCLASS()
 class PROJECTTITAN_API ATiConquistabot : public ATiCharacter
 {
 	GENERATED_BODY()
-	
+
+	ATiConquistabot(const FObjectInitializer& ObjectInitializer);
+
+protected:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UTiDiaryComponent* DiaryComponent;
 };

@@ -12,13 +12,19 @@
 				"GameplayAbilities",
 				"Engine",
 				"AIModule",
-				"Niagara"
+				"Niagara",
+				"CoreUObject",
+				"UMG"
 			]
 		}
 	],
 	"Plugins": [
 		{
 			"Name": "GameplayAbilities",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonUI",
 			"Enabled": true
 		}
 	]

@@ -45,9 +45,9 @@ Super(ObjectInitializer.SetDefaultSubobjectClass<UTiCharacterMovementComponent>(
 	CameraComp->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComp->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	Widget = CreateDefaultSubobject<UWidgetComponent>("WidgetComponent");
-	Widget->SetupAttachment(GetCapsuleComponent());
-	Widget->SetUsingAbsoluteRotation(true);
+	AmmoWidget = CreateDefaultSubobject<UWidgetComponent>("WidgetComponent");
+	AmmoWidget->SetupAttachment(RootComponent);
+	AmmoWidget->SetUsingAbsoluteRotation(true);
 
 	AbilitySystemComponent = CreateDefaultSubobject<UTiAbilitySystemComponent>("ActionComponent");
 
@@ -198,8 +198,7 @@ void ATiCharacter::InitializeAttributes()
 		UE_LOG(LogTemp, Error, TEXT("%s() Missing DefaultAttributes for %s. Please fill in the character's Blueprint."), *FString(__FUNCTION__), *GetName());
 		return;
 	}
-
-	// Can run on Server and Client
+	
 	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 	EffectContext.AddSourceObject(this);
 

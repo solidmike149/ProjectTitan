@@ -17,19 +17,16 @@ class PROJECTTITAN_API UTiGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 
-
 public:
 
-	void TryActivateAbilityOnSpawn(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) const;
-	
+	UTiGameplayAbility();
+
 protected:
 
 	//~UGameplayAbility interface
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 	virtual void OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 	//~End of UGameplayAbility interface
-
-	virtual void OnPawnAvatarSet();
 
 	/** Called when this ability is granted to the ability system component. */
 	UFUNCTION(BlueprintImplementableEvent, Category = Ability, DisplayName = "OnAbilityAdded")
@@ -39,14 +36,13 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Ability, DisplayName = "OnAbilityRemoved")
 	void K2_OnAbilityRemoved();
 
-	/** Called when the ability system is initialized with a pawn avatar. */
-	UFUNCTION(BlueprintImplementableEvent, Category = Ability, DisplayName = "OnPawnAvatarSet")
-	void K2_OnPawnAvatarSet();
-	
-
 public:
-	
-	UTiGameplayAbility();
+
+	virtual void OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
+
+	// Tells an ability to activate immediately when its granted. Used for passive abilities and abilities forced on others.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ability")
+	bool ActivateAbilityOnGranted;
 
 	// Abilities with this set will automatically activate when the input is pressed
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Ability")

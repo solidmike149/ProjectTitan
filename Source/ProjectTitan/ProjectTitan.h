@@ -17,5 +17,7 @@ enum class ETiAbilityInputID : uint8
 	// 3 Sprint
 	Sprint			UMETA(DisplayName = "Sprint"),
 	// 4 Shoot
-	Shoot			UMETA(DisplayName = "Shoot")
+	Shoot			UMETA(DisplayName = "Shoot"),
+	// 5 Interact
+	Interact			UMETA(DisplayName = "Interact")
 };
