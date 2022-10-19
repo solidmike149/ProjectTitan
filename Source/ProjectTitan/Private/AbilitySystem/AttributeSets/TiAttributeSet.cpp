@@ -17,7 +17,7 @@ UWorld* UTiAttributeSet::GetWorld() const
 	return Outer->GetWorld();
 }
 
-UTiAbilitySystemComponent* UTiAttributeSet::GetLyraAbilitySystemComponent() const
+UTiAbilitySystemComponent* UTiAttributeSet::GetTiAbilitySystemComponent() const
 {
 	return Cast<UTiAbilitySystemComponent>(GetOwningAbilitySystemComponent());
 }

@@ -11,9 +11,6 @@ UTiDiaryComponent::UTiDiaryComponent()
 
 }
 
-
-
-
 void UTiDiaryComponent::AddDiaryEntry(FName EntryId)
 {
 	if(DiaryTable == nullptr)
@@ -28,16 +25,17 @@ void UTiDiaryComponent::AddDiaryEntry(FName EntryId)
 
 	if (Entry)
 	{
-		// TODO
-		//GetOwner()->DisableInput(GetWorld()->GetFirstPlayerController());
 		Diary.Add(EntryId, *Entry);
 
-		// TODO
-		//OnDiaryEntryAdded.Broadcast(this, *Entry);
+		if(!bIsInDebugMode)
+		{GetOwner()->DisableInput(GetWorld()->GetFirstPlayerController());
+            		
+			OnDiaryEntryAdded.Broadcast(this, *Entry);
+		}
 		
-		if (!UnlockedCategories.Contains(Entry->Category))
+		if (!UnlockedCategories.Contains(Entry->CategoryKey))
 		{
-			UnlockedCategories.Add(Entry->Category);
+			UnlockedCategories.Add(Entry->CategoryKey);
 		}
 	}
 	
@@ -55,7 +53,7 @@ void UTiDiaryComponent::ClosePopUp()
 }
 
 
-void UTiDiaryComponent::GetEntryDataByCategory(EEntryCategory Category, TArray<FIndexData>& OutData) const
+void UTiDiaryComponent::GetEntryDataByCategory(FString Category, TArray<FIndexData>& OutData) const
 {
 	TArray<FDiaryEntry> Entries;
 	
@@ -63,9 +61,9 @@ void UTiDiaryComponent::GetEntryDataByCategory(EEntryCategory Category, TArray<F
 
 	for (auto& DiaryEntry : Diary)
 	{
-		if (DiaryEntry.Value.Category == Category)
+		if (DiaryEntry.Value.CategoryKey == Category)
 		{
-			FIndexData NewIndex = FIndexData(nullptr, DiaryEntry.Key, DiaryEntry.Value.Title);
+			FIndexData NewIndex = FIndexData(nullptr, DiaryEntry.Key, DiaryEntry.Value.TitleKey);
 			OutData.Add(NewIndex);
 		}
 	}
@@ -82,27 +80,8 @@ bool UTiDiaryComponent::GetEntryById(FName Id, FDiaryEntry& Data) const
 	return false;
 }
 
-TArray<FText> UTiDiaryComponent::GetEntryTitlesByCategory(EEntryCategory Category) const
-{
-	TArray<FDiaryEntry> Entries;
 
-	Diary.GenerateValueArray(Entries);
-
-	TArray<FText> Titles;
-
-	for (FDiaryEntry& Entry : Entries)
-	{
-		if (Entry.Category == Category)
-		{
-			Titles.Add(Entry.Title);
-		}
-	}
-
-	return Titles;
-}
-
-
-TArray<EEntryCategory> UTiDiaryComponent::GetUnlockedCategories() const
+TArray<FString> UTiDiaryComponent::GetUnlockedCategories() const
 {
 	return UnlockedCategories;
 }

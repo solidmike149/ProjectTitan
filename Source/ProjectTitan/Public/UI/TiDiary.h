@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "CommonActivatableWidget.h"
 #include "TiDiary.generated.h"
 
 class UCommonListView;
@@ -15,26 +15,17 @@ enum class EEntryCategory : uint8;
  * 
  */
 UCLASS()
-class PROJECTTITAN_API UTiDiary : public UUserWidget
+class PROJECTTITAN_API UTiDiary : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
 
 public:
 
 	UFUNCTION(BlueprintNativeEvent)
-	void OnCategoryChanged(EEntryCategory Category);
-
-	UFUNCTION(BlueprintNativeEvent)
 	void OnIndexSelected(FName IndexId);
 
 protected:
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UImage* BackgroundImage;
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UCommonListView* CategoryList;
-
+	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UCommonListView* IndexList;
 

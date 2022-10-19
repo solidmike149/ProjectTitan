@@ -5,11 +5,6 @@
 
 #include "Diary/TiDiaryComponent.h"
 
-void UTiDiary::OnCategoryChanged_Implementation(EEntryCategory Category)
-{
-	
-}
-
 void UTiDiary::OnIndexSelected_Implementation(FName IndexId)
 {
 	

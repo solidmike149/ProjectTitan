@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
-#include "AbilitySystemComponent.h"
+#include "AbilitySystem/TiAbilitySystemComponent.h"
 #include "TiAttributeSet.generated.h"
 
 /**
@@ -25,7 +25,6 @@
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 
-class UTiAbilitySystemComponent;
 // Delegate used to broadcast attribute events.
 DECLARE_MULTICAST_DELEGATE_FourParams(FTiAttributeEvent, AActor* /*EffectInstigator*/, AActor* /*EffectCauser*/, const FGameplayEffectSpec& /*EffectSpec*/, float /*EffectMagnitude*/);
 
@@ -35,7 +34,7 @@ DECLARE_MULTICAST_DELEGATE_FourParams(FTiAttributeEvent, AActor* /*EffectInstiga
  *
  *	Base attribute set class for the project.
  */
-UCLASS()
+UCLASS(Abstract)
 class PROJECTTITAN_API UTiAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
@@ -46,5 +45,5 @@ public:
 
 	UWorld* GetWorld() const override;
 
-	UTiAbilitySystemComponent* GetLyraAbilitySystemComponent() const;
+	UTiAbilitySystemComponent* GetTiAbilitySystemComponent() const;
 };

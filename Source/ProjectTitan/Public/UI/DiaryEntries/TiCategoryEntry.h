@@ -10,7 +10,7 @@
 class UTextBlock;
 enum class EEntryCategory : uint8;
 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FOnClickedCategory, EEntryCategory, Category);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FOnClickedCategory, FString, Category);
 
 class UButton;
 /**
@@ -38,7 +38,7 @@ protected:
 	UTextBlock* CategoryText;
 
 	UPROPERTY(BlueprintReadWrite)
-	EEntryCategory Category;
+	FString Category;
 
 	UFUNCTION()
 	void OnButtonClicked();

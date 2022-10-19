@@ -18,10 +18,6 @@ class PROJECTTITAN_API ATiGuardian : public ATiAiCharacter
 {
 	GENERATED_BODY()
 
-protected:
-
-
-
 public:
 
 	UPROPERTY(BlueprintReadWrite)
@@ -29,6 +25,4 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void GetShield();
-
-	ATiGuardian();
 };

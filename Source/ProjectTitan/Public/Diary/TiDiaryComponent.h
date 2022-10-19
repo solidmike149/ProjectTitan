@@ -8,40 +8,26 @@
 #include "UI/TiIndexData.h"
 #include "TiDiaryComponent.generated.h"
 
-UENUM(BlueprintType)
-enum class EEntryCategory : uint8
-{
-	None,
-	Murales,
-	CortesDiaryPages,
-	Scrolls,
-	Bodies,
-	Training,
-	Boss,
-	Objects,
-	Locations
-};
-
 USTRUCT(BlueprintType)
 struct FDiaryEntry : public FTableRowBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText Title;
+	FString TitleKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	EEntryCategory Category;
+	FString CategoryKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText Description;
+	TArray<FString> DescriptionKeys;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UTexture2D> Icon;
 };
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDiaryEntryAdded, UTiDiaryComponent*, Istigator, const FDiaryEntry&, DiaryEntry);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDiaryEntryAdded, UTiDiaryComponent*, Instigator, const FDiaryEntry&, DiaryEntry);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTTITAN_API UTiDiaryComponent : public UActorComponent
@@ -53,18 +39,21 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UDataTable* DiaryTable;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, SaveGame)
 	TMap<FName, FDiaryEntry> Diary;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<EEntryCategory> UnlockedCategories;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, SaveGame)
+	TArray<FString> UnlockedCategories;
+
+	UPROPERTY(EditAnywhere)
+	bool bIsInDebugMode;
 
 public:	
 
 	UTiDiaryComponent();
 	
 	UFUNCTION(BlueprintCallable)
-	TArray<EEntryCategory> GetUnlockedCategories() const;
+	TArray<FString> GetUnlockedCategories() const;
 
 	UFUNCTION(BlueprintCallable)
 	void AddDiaryEntry(FName EntryId);
@@ -73,13 +62,10 @@ public:
 	void ClosePopUp();
 
 	UFUNCTION(BlueprintCallable)
-	void GetEntryDataByCategory(EEntryCategory Category, TArray<FIndexData>& OutData) const;
+	void GetEntryDataByCategory(FString Category, TArray<FIndexData>& OutData) const;
 
 	UFUNCTION(BlueprintCallable)
 	bool GetEntryById(FName Id, FDiaryEntry& Data) const;
-
-	UFUNCTION(BlueprintCallable)
-	TArray<FText> GetEntryTitlesByCategory(EEntryCategory Category) const;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnDiaryEntryAdded OnDiaryEntryAdded;

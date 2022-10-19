@@ -20,9 +20,10 @@ public:
 
 	ATTRIBUTE_ACCESSORS(UTiHealthSet, Health);
 	ATTRIBUTE_ACCESSORS(UTiHealthSet, MaxHealth);
+	ATTRIBUTE_ACCESSORS(UTiHealthSet, Speed);
 
 	// Delegate to broadcast when the health attribute reaches zero.
-	FTiAttributeEvent OnOutOfHealth;
+	mutable FTiAttributeEvent OnOutOfHealth;
 
 protected:
 	
@@ -35,4 +36,7 @@ protected:
 	// The current max health attribute. Max health is an attribute since gameplay effects can modify it.
 	UPROPERTY(BlueprintReadOnly, Category = "Lyra|Health")
 	FGameplayAttributeData MaxHealth;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Speed")
+	FGameplayAttributeData Speed;
 };

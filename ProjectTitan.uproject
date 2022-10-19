@@ -15,7 +15,8 @@
 				"Niagara",
 				"CoreUObject",
 				"UMG",
-				"CommonUI"
+				"CommonUI",
+				"DeveloperSettings"
 			]
 		}
 	],

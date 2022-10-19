@@ -65,7 +65,7 @@ struct FAttack
 
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent, DisplayName="Attack Sorting Component"))
 class PROJECTTITAN_API UTiAttackSortingComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -77,7 +77,7 @@ public:
 public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (TitleProperty = "AttackName"), Category = "Attacks")
-	TArray<FAttack> AttackDatas;
+	TArray<FAttack> AttackData;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attacks")
 	float ComboWindow;

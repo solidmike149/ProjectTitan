@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 
-
 UENUM(BlueprintType)
 enum class ETiAbilityInputID : uint8
 {

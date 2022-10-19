@@ -22,9 +22,9 @@ void UTiCategoryEntry::NativeOnListItemObjectSet(UObject* ListItemObject)
 
 	OnClicked.BindUFunction(Data.Parent.Get(), "OnCategoryChanged");
 
-	FText Text = UEnum::GetDisplayValueAsText(Data.Category);
+	//FText Text = UEnum::GetDisplayValueAsText(Data.Category);
 
-	CategoryText->SetText(Text);
+	//CategoryText->SetText(Text);
 }
 
 void UTiCategoryEntry::OnButtonClicked()

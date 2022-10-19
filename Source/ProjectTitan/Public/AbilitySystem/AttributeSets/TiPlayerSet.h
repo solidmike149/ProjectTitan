@@ -21,7 +21,6 @@ public:
 	ATTRIBUTE_ACCESSORS(UTiPlayerSet, MaxStamina);
 	ATTRIBUTE_ACCESSORS(UTiPlayerSet, Ammo);
 	ATTRIBUTE_ACCESSORS(UTiPlayerSet, MaxAmmo);
-	ATTRIBUTE_ACCESSORS(UTiPlayerSet, Speed);
 	
 	// AttributeSet Overrides
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
@@ -40,9 +39,4 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Ammo")
 	FGameplayAttributeData MaxAmmo;
-
-
-	UPROPERTY(BlueprintReadOnly, Category = "Speed")
-	FGameplayAttributeData Speed;
-
 };

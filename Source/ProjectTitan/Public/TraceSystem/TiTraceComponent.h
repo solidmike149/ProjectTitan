@@ -9,6 +9,7 @@
 #include "TiTraceComponent.generated.h"
 
 class UGameplayEffect;
+
 UENUM(BlueprintType)
 enum class ETraceShape : uint8
 {

@@ -13,7 +13,7 @@ UTiAttackSortingComponent::UTiAttackSortingComponent()
 
 void UTiAttackSortingComponent::IncrementScoreByCurve(int32 AttackIndex, float Distance, FAttack& OutAttack)
 {
-	FAttack& Attack = AttackDatas[AttackIndex];
+	FAttack& Attack = AttackData[AttackIndex];
 	
 	FRuntimeFloatCurve Curve = Attack.DistanceCurve;
 
@@ -31,7 +31,7 @@ void UTiAttackSortingComponent::IncrementScoreByCurve(int32 AttackIndex, float D
 
 void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex)
 {
-	FCombo ActiveCombo = AttackDatas[AttackIndex].ComboData;
+	FCombo ActiveCombo = AttackData[AttackIndex].ComboData;
 
 	ATiAIControllerBase* AIController = Cast<ATiAIControllerBase>(GetOwner());
 
@@ -40,7 +40,7 @@ void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex)
 		if (AIController->bIsInComboCpp)
 		{
 			int32 Index = 0;
-			for (FAttack& Attack : AttackDatas)
+			for (FAttack& Attack : AttackData)
 			{
 				if (Index == AttackIndex)
 				{
@@ -66,7 +66,7 @@ void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex)
 		{
 			int32 Index = 0;
 		
-			for (FAttack& Attack : AttackDatas)
+			for (FAttack& Attack : AttackData)
 			{
 				if (Index == AttackIndex)
 				{

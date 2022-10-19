@@ -19,7 +19,7 @@ struct FCategoryData
 	TWeakObjectPtr<UObject> Parent;
 
 	UPROPERTY(BlueprintReadWrite)
-	EEntryCategory Category;
+	FString Category;
 	
 };
 UCLASS(Blueprintable)

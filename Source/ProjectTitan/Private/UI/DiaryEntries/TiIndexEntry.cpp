@@ -3,9 +3,10 @@
 
 #include "UI/DiaryEntries/TiIndexEntry.h"
 
+#include "CommonButtonBase.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
-#include "UI/TiDiary.h"
+#include "Settings/TiStringTableSettings.h"
 #include "UI/TiIndexData.h"
 
 void UTiIndexEntry::NativeConstruct()
@@ -23,10 +24,12 @@ void UTiIndexEntry::NativeOnListItemObjectSet(UObject* ListItemObject)
 
 	OnClicked.BindUFunction(Data.Parent.Get(), "OnIndexSelected");
 
-	IndexText->SetText(Data.Title);
+	const UTiStringTableSettings* StringTable = GetDefault<UTiStringTableSettings>();
+	
+	IndexText->SetText(FText::FromStringTable(StringTable->DiaryTablePath, Data.TitleId));
 }
 
 void UTiIndexEntry::OnButtonClicked()
 {
-	OnClicked.Execute(Id);
+	OnClicked.ExecuteIfBound(Id);
 }
