@@ -14,13 +14,13 @@ struct FDiaryEntry : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FString TitleKey;
+	FText Title;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FString CategoryKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<FString> DescriptionKeys;
+	TArray<FText> Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UTexture2D> Icon;
@@ -51,6 +51,10 @@ protected:
 public:	
 
 	UTiDiaryComponent();
+
+	/** Returns the diary component if one exists on the specified actor. */
+	UFUNCTION(BlueprintPure, Category = "Health")
+	static UTiDiaryComponent* FindHealthComponent(const AActor* Actor) { return (Actor ? Actor->FindComponentByClass<UTiDiaryComponent>() : nullptr); }
 	
 	UFUNCTION(BlueprintCallable)
 	TArray<FString> GetUnlockedCategories() const;
@@ -62,7 +66,7 @@ public:
 	void ClosePopUp();
 
 	UFUNCTION(BlueprintCallable)
-	void GetEntryDataByCategory(FString Category, TArray<FIndexData>& OutData) const;
+	void GetEntryDataByCategory(const FString& Category, TArray<FIndexData>& OutData) const;
 
 	UFUNCTION(BlueprintCallable)
 	bool GetEntryById(FName Id, FDiaryEntry& Data) const;

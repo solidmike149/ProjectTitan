@@ -1,31 +1,32 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayEffect.h"
-#include "GameFramework/Character.h"
+#include "ModularCharacter.h"
+#include "SaveSystem/GiltSaveInterface.h"
 #include "TiCharacter.generated.h"
 
+
+class UGiltHealthComponent;
 class UTiGameplayAbility;
 class UTiHealthSet;
-class UTiHealthComponent;
 class UTiAbilitySystemComponent;
 
-UCLASS()
-class PROJECTTITAN_API ATiCharacter : public ACharacter, public IAbilitySystemInterface
+UCLASS(Config = Game, Meta = (ShortTooltip = "The base character pawn class used by this project."))
+class PROJECTTITAN_API ATiCharacter : public AModularCharacter, public IAbilitySystemInterface, public IGiltSaveInterface
 {
 	GENERATED_BODY()
 
-
-protected:
+	protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Abilities")
 	UTiAbilitySystemComponent* AbilitySystemComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lyra|Character", Meta = (AllowPrivateAccess = "true"))
-	UTiHealthComponent* HealthComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character", Meta = (AllowPrivateAccess = "true"))
+	UGiltHealthComponent* HealthComponent;
 	
 	UPROPERTY()
 	UTiHealthSet* HealthAttributeSet;
@@ -33,7 +34,6 @@ protected:
 	virtual void PostInitializeComponents() override;
 	
 	virtual void BeginPlay() override;
-	
 
 	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
@@ -77,6 +77,6 @@ public:
 	// Implement IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
-	ATiCharacter(const FObjectInitializer& ObjectInitializer);
-	
+	// Sets default values for this character's properties
+	ATiCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };

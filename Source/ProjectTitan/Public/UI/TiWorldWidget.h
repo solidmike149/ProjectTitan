@@ -10,7 +10,7 @@ class USizeBox;
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class PROJECTTITAN_API UTiWorldWidget : public UUserWidget
 {
 	GENERATED_BODY()

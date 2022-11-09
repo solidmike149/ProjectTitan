@@ -8,8 +8,16 @@ public class ProjectTitan : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "CommonUI", "GameplayAbilities", "Niagara" });
-		
+		PublicDependencyModuleNames.AddRange(new string[] {  
+			"Core",
+			"CoreUObject",
+			"ApplicationCore",
+			"Engine",
+			"InputCore",
+			"GameplayAbilities",
+			"Niagara",
+			"EnhancedInput"
+		});
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"Slate",
 			"SlateCore",
@@ -18,7 +26,16 @@ public class ProjectTitan : ModuleRules
 			"AIModule",
 			"NavigationSystem",
 			"UMG",
-
+			"CommonUI",
+			"CommonInput",
+			"CommonLoadingScreen",
+			"CommonGame",
+			"ModularGameplay",
+			"ModularGameplayActors",
+			"GameFeatures",
+			"UIExtension",
+			"AudioMixer",
+			"AudioModulation"
 		});
 	}
 }

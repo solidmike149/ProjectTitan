@@ -34,7 +34,7 @@ protected:
 	FGameplayAttributeData Health;
 
 	// The current max health attribute. Max health is an attribute since gameplay effects can modify it.
-	UPROPERTY(BlueprintReadOnly, Category = "Lyra|Health")
+	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	FGameplayAttributeData MaxHealth;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Speed")

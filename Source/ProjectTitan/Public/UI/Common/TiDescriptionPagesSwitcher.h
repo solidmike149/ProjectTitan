@@ -11,7 +11,7 @@ class UWidgetSwitcher;
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class PROJECTTITAN_API UTiDescriptionPagesSwitcher : public UCommonUserWidget
 {
 	GENERATED_BODY()

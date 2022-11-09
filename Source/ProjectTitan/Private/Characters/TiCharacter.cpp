@@ -1,17 +1,18 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Characters/TiCharacter.h"
 
+#include "CommonInputSubsystem.h"
 #include "AbilitySystem/TiAbilitySystemComponent.h"
 #include "AbilitySystem/TiGameplayAbility.h"
 #include "AbilitySystem/AttributeSets/TiHealthSet.h"
-#include "Characters/TiCharacterMovementComponent.h"
-#include "Characters/TiHealthComponent.h"
+#include "Characters/GiltCharacterMovementComponent.h"
+#include "Characters/GiltHealthComponent.h"
 #include "Components/CapsuleComponent.h"
 
 ATiCharacter::ATiCharacter(const FObjectInitializer& ObjectInitializer) :
-Super(ObjectInitializer.SetDefaultSubobjectClass<UTiCharacterMovementComponent>(CharacterMovementComponentName))
+Super(ObjectInitializer.SetDefaultSubobjectClass<UGiltCharacterMovementComponent>(CharacterMovementComponentName))
 {
 	// Set size for player capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -31,9 +32,8 @@ Super(ObjectInitializer.SetDefaultSubobjectClass<UTiCharacterMovementComponent>(
 
 	HealthAttributeSet = CreateDefaultSubobject<UTiHealthSet>("HealthSet");
 
-	HealthComponent = CreateDefaultSubobject<UTiHealthComponent>("HealthComponent");
+	HealthComponent = CreateDefaultSubobject<UGiltHealthComponent>("HealthComponent");
 }
-
 
 void ATiCharacter::PostInitializeComponents()
 {
@@ -58,7 +58,6 @@ void ATiCharacter::BeginPlay()
 		AddCharacterAbilities();
 	}
 }
-
 
 void ATiCharacter::AddCharacterAbilities()
 {
@@ -108,7 +107,6 @@ void ATiCharacter::AddStartupEffects()
 	}
 }
 
-
 void ATiCharacter::OnDeathStarted(AActor*)
 {
 	DisableMovementAndCollision();
@@ -118,7 +116,6 @@ void ATiCharacter::OnDeathFinished(AActor*)
 {
 	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::DestroyDueToDeath);
 }
-
 
 void ATiCharacter::DisableMovementAndCollision()
 {
@@ -144,7 +141,6 @@ void ATiCharacter::DestroyDueToDeath()
 	UninitAndDestroy();
 }
 
-
 void ATiCharacter::UninitAndDestroy()
 {
 
@@ -153,8 +149,6 @@ void ATiCharacter::UninitAndDestroy()
 	
 	//SetActorHiddenInGame(true);
 }
-
-
 
 void ATiCharacter::RemoveCharacterAbilities()
 {
@@ -180,7 +174,6 @@ void ATiCharacter::RemoveCharacterAbilities()
 		AbilitySystemComponent->ClearAbility(AbilitiesToRemove[i]);
 	}
 }
-
 
 UAbilitySystemComponent* ATiCharacter::GetAbilitySystemComponent() const
 {

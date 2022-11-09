@@ -7,14 +7,12 @@
 #include "TiDiary.generated.h"
 
 class UCommonListView;
-class UImage;
 class UButton;
 
-enum class EEntryCategory : uint8;
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class PROJECTTITAN_API UTiDiary : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
@@ -23,12 +21,5 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void OnIndexSelected(FName IndexId);
-
-protected:
 	
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UCommonListView* IndexList;
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UButton* CloseButton;
 };

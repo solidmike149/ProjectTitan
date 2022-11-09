@@ -63,9 +63,9 @@ UTiAbilitySet::UTiAbilitySet(const FObjectInitializer& ObjectInitializer)
 {
 }
 
-void UTiAbilitySet::GiveToAbilitySystem(UTiAbilitySystemComponent* ASC, FTiAbilitySet_GrantedHandles* OutGrantedHandles, UObject* SourceObject) const
+void UTiAbilitySet::GiveToAbilitySystem(UTiAbilitySystemComponent* GiltASC, FTiAbilitySet_GrantedHandles* OutGrantedHandles, UObject* SourceObject) const
 {
-	check(ASC);
+	check(GiltASC);
 
 	// Grant the gameplay abilities.
 	for (int32 AbilityIndex = 0; AbilityIndex < GrantedGameplayAbilities.Num(); ++AbilityIndex)
@@ -84,7 +84,7 @@ void UTiAbilitySet::GiveToAbilitySystem(UTiAbilitySystemComponent* ASC, FTiAbili
 		AbilitySpec.SourceObject = SourceObject;
 		AbilitySpec.DynamicAbilityTags.AddTag(AbilityToGrant.InputTag);
 
-		const FGameplayAbilitySpecHandle AbilitySpecHandle = ASC->GiveAbility(AbilitySpec);
+		const FGameplayAbilitySpecHandle AbilitySpecHandle = GiltASC->GiveAbility(AbilitySpec);
 
 		if (OutGrantedHandles)
 		{
@@ -104,7 +104,7 @@ void UTiAbilitySet::GiveToAbilitySystem(UTiAbilitySystemComponent* ASC, FTiAbili
 		}
 
 		const UGameplayEffect* GameplayEffect = EffectToGrant.GameplayEffect->GetDefaultObject<UGameplayEffect>();
-		const FActiveGameplayEffectHandle GameplayEffectHandle = ASC->ApplyGameplayEffectToSelf(GameplayEffect, EffectToGrant.EffectLevel, ASC->MakeEffectContext());
+		const FActiveGameplayEffectHandle GameplayEffectHandle = GiltASC->ApplyGameplayEffectToSelf(GameplayEffect, EffectToGrant.EffectLevel, GiltASC->MakeEffectContext());
 
 		if (OutGrantedHandles)
 		{
@@ -123,8 +123,8 @@ void UTiAbilitySet::GiveToAbilitySystem(UTiAbilitySystemComponent* ASC, FTiAbili
 			continue;
 		}
 
-		UAttributeSet* NewSet = NewObject<UAttributeSet>(ASC->GetOwner(), SetToGrant.AttributeSet);
-		ASC->AddAttributeSetSubobject(NewSet);
+		UAttributeSet* NewSet = NewObject<UAttributeSet>(GiltASC->GetOwner(), SetToGrant.AttributeSet);
+		GiltASC->AddAttributeSetSubobject(NewSet);
 
 		if (OutGrantedHandles)
 		{

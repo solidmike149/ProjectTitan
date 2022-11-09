@@ -13,7 +13,7 @@ UTiDiaryComponent::UTiDiaryComponent()
 
 void UTiDiaryComponent::AddDiaryEntry(FName EntryId)
 {
-	if(DiaryTable == nullptr)
+	if (DiaryTable == nullptr)
 	{
 		FString StringDebug = FString::Printf(TEXT("Set DataTable On Diary Component"));
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, StringDebug);
@@ -53,7 +53,7 @@ void UTiDiaryComponent::ClosePopUp()
 }
 
 
-void UTiDiaryComponent::GetEntryDataByCategory(FString Category, TArray<FIndexData>& OutData) const
+void UTiDiaryComponent::GetEntryDataByCategory(const FString& Category, TArray<FIndexData>& OutData) const
 {
 	TArray<FDiaryEntry> Entries;
 	
@@ -63,7 +63,7 @@ void UTiDiaryComponent::GetEntryDataByCategory(FString Category, TArray<FIndexDa
 	{
 		if (DiaryEntry.Value.CategoryKey == Category)
 		{
-			FIndexData NewIndex = FIndexData(nullptr, DiaryEntry.Key, DiaryEntry.Value.TitleKey);
+			FIndexData NewIndex = FIndexData(nullptr, DiaryEntry.Key, DiaryEntry.Value.Title);
 			OutData.Add(NewIndex);
 		}
 	}

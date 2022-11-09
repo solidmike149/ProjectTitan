@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Characters/GiltCharacter.h"
 #include "Characters/TiCharacter.h"
 #include "Interfaces/TiTargetInterface.h"
 #include "TiAiCharacter.generated.h"
@@ -12,7 +13,7 @@ class UGameplayEffect;
 class UTiGameplayAbility;
 class UTiAbilitySystemComponent;
 
-UCLASS()
+UCLASS(Abstract)
 class PROJECTTITAN_API ATiAiCharacter : public ATiCharacter, public ITiTargetInterface
 {
 	GENERATED_BODY()

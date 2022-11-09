@@ -4,7 +4,7 @@
 #include "AbilitySystem/Abilities/TiGA_PlayerShoot.h"
 
 #include "Actors/TiProjectileBase.h"
-#include "Characters/TiConquistabot.h"
+#include "Characters/GiltConquistabot.h"
 #include "Interfaces/TiTargetInterface.h"
 
 
@@ -28,7 +28,7 @@ FVector UTiGA_PlayerShoot::AdjustRotation(AActor* TargetActor)
 
 void UTiGA_PlayerShoot::ActualShoot(FVector TargetLocation)
 {
-	ATiConquistabot* Owner = Cast<ATiConquistabot>(GetOwningActorFromActorInfo());
+	AGiltConquistabot* Owner = Cast<AGiltConquistabot>(GetOwningActorFromActorInfo());
 
 	if (Owner)
 	{

@@ -18,15 +18,15 @@ struct FIndexData
 	FName Id;
 	
 	UPROPERTY(BlueprintReadWrite)
-	FString TitleId;
+	FText Title;
 
 	FIndexData(){}
 
-	FIndexData(TWeakObjectPtr<UObject> NewParent, FName NewId, FString NewTitle)
+	FIndexData(TWeakObjectPtr<UObject> NewParent, FName NewId, FText NewTitle)
 	{
 		Parent = NewParent;
 		Id = NewId;
-		TitleId = NewTitle;
+		Title = NewTitle;
 	}
 };
 /**

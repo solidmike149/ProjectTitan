@@ -6,7 +6,6 @@
 #include "CommonButtonBase.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
-#include "Settings/TiStringTableSettings.h"
 #include "UI/TiIndexData.h"
 
 void UTiIndexEntry::NativeConstruct()
@@ -23,10 +22,8 @@ void UTiIndexEntry::NativeOnListItemObjectSet(UObject* ListItemObject)
 	Id = Data.Id;
 
 	OnClicked.BindUFunction(Data.Parent.Get(), "OnIndexSelected");
-
-	const UTiStringTableSettings* StringTable = GetDefault<UTiStringTableSettings>();
 	
-	IndexText->SetText(FText::FromStringTable(StringTable->DiaryTablePath, Data.TitleId));
+	IndexText->SetText(Data.Title);
 }
 
 void UTiIndexEntry::OnButtonClicked()

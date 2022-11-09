@@ -3,7 +3,7 @@
 
 #include "UI/TiWorldWidget.h"
 
-#include "TiLogChannels.h"
+#include "GiltLogChannels.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/SizeBox.h"
 #include "Kismet/GameplayStatics.h"
@@ -16,7 +16,7 @@ void UTiWorldWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	{
 		RemoveFromParent();
 
-		UE_LOG(LogTitan, Warning, TEXT("AttachedActor no longer valid, removing Health Widget."));
+		UE_LOG(LogGilt, Warning, TEXT("AttachedActor no longer valid, removing Health Widget."));
 		return;
 	}
 

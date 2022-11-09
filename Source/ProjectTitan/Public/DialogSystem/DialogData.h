@@ -17,7 +17,7 @@ struct FTiDialogLine : public FTableRowBase
 	FString Talker;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FString LineKey;
+	FText Line;
 };
 
 /**
