@@ -30,11 +30,14 @@ public:
 	virtual void UpdateAssetBundleData() override;
 #endif
 	//~End of UPrimaryDataAsset interface
-
-	public:
+	
 	// List of Game Feature Plugins this experience wants to have active
 	UPROPERTY(EditDefaultsOnly, Category = Gameplay)
 	TArray<FString> GameFeaturesToEnable;
+
+	// List of additional action sets to compose into this experience
+	UPROPERTY(EditDefaultsOnly, Category = Gameplay)
+	TArray<TObjectPtr<UGiltExperienceActionSet>> ActionSets;
 
 	// /** The default pawn class to spawn for players */
 	// //@TODO: Make soft?
@@ -45,7 +48,5 @@ public:
 	UPROPERTY(EditDefaultsOnly, Instanced, Category="Actions")
 	TArray<UGameFeatureAction*> Actions;
 
-	// List of additional action sets to compose into this experience
-	UPROPERTY(EditDefaultsOnly, Category=Gameplay)
-	TArray<TObjectPtr<UGiltExperienceActionSet>> ActionSets;
+
 };

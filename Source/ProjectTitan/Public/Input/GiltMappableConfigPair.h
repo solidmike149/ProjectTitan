@@ -23,9 +23,10 @@ struct FLoadedMappableConfigPair
 		, bIsActive(InIsActive)
 	{}
 
+
 	/** The player mappable input config that should be applied to the Enhanced Input subsystem */
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	const UPlayerMappableInputConfig* Config = nullptr;
+	TObjectPtr<const UPlayerMappableInputConfig> Config = nullptr;
 
 	/** The type of device that this mapping config should be applied to */
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)

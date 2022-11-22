@@ -28,6 +28,10 @@
 			"Enabled": true
 		},
 		{
+			"Name": "EnhancedInput",
+			"Enabled": true
+		},
+		{
 			"Name": "CommonUI",
 			"Enabled": true
 		},
@@ -48,15 +52,15 @@
 			"Enabled": true
 		},
 		{
-			"Name": "EnhancedInput",
-			"Enabled": true
-		},
-		{
 			"Name": "GameFeatures",
 			"Enabled": true
 		},
 		{
 			"Name": "UIExtension",
+			"Enabled": true
+		},
+		{
+			"Name": "GameplayMessageRouter",
 			"Enabled": true
 		},
 		{
@@ -66,6 +70,11 @@
 		{
 			"Name": "AudioModulation",
 			"Enabled": true
+		},
+		{
+			"Name": "SubsystemBrowserPlugin",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/f1ba87b348774d338e75d25ddbc46b98"
 		}
 	]
 }

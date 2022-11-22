@@ -61,6 +61,10 @@ protected:
 	virtual void OnAbilitySystemInitialized();
 	virtual void OnAbilitySystemUninitialized();
 
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	void InitializeGameplayTags();
+
 	// Begins the death sequence for the character (disables collision, disables movement, etc...)
 	UFUNCTION()
 	virtual void OnDeathStarted(AActor* OwningActor);
@@ -68,10 +72,14 @@ protected:
 	// Ends the death sequence for the character (detaches controller, destroys pawn, etc...)
 	UFUNCTION()
 	virtual void OnDeathFinished(AActor* OwningActor);
-	
+
 	void DisableMovementAndCollision();
 	void DestroyDueToDeath();
 	void UninitAndDestroy();
+
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
+	void SetMovementModeTag(EMovementMode MovementMode, uint8 CustomMovementMode, bool bTagEnabled);
+	
 	
 	// Called when the death sequence for the character has completed
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="OnDeathFinished"))
@@ -79,9 +87,9 @@ protected:
 
 private:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lyra|Character", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gilt|Character", Meta = (AllowPrivateAccess = "true"))
 	UGiltPawnExtensionComponent* PawnExtComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lyra|Character", Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gilt|Character", Meta = (AllowPrivateAccess = "true"))
 	UGiltHealthComponent* HealthComponent;
 };

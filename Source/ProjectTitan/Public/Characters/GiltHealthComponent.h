@@ -6,10 +6,11 @@
 #include "Components/GameFrameworkComponent.h"
 #include "GiltHealthComponent.generated.h"
 
+class UGiltHealthSet;
+class UGiltAbilitySystemComponent;
 struct FGameplayEffectSpec;
 struct FOnAttributeChangeData;
-class UTiHealthSet;
-class UTiAbilitySystemComponent;
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FGiltHealth_DeathEvent, AActor*, OwningActor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FGiltHealth_AttributeChanged, UGiltHealthComponent*, HealthComponent, float, OldValue, float, NewValue, AActor*, Instigator);
@@ -47,7 +48,7 @@ public:
 	
 	/** Initialize the component using an ability system component. */
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	void InitializeWithAbilitySystem(UTiAbilitySystemComponent* InASC);
+	void InitializeWithAbilitySystem(UGiltAbilitySystemComponent* InASC);
 	
 	/** Uninitialize the component, clearing any references to the ability system. */
 	UFUNCTION(BlueprintCallable, Category = "Health")
@@ -102,11 +103,11 @@ protected:
 	
 	// Ability system used by this component.
 	UPROPERTY()
-	UTiAbilitySystemComponent* AbilitySystemComponent;
+	UGiltAbilitySystemComponent* AbilitySystemComponent;
 
 	// Health set used by this component.
 	UPROPERTY()
-	const UTiHealthSet* HealthSet;
+	const UGiltHealthSet* HealthSet;
 
 	// Replicated state used to handle dying.
 	UPROPERTY()

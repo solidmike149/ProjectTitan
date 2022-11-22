@@ -7,6 +7,7 @@
 #include "GiltPlayerController.generated.h"
 
 
+class AGiltPlayerState;
 class UGiltAbilitySystemComponent;
 class AGiltHUD;
 /**
@@ -19,11 +20,24 @@ class PROJECTTITAN_API AGiltPlayerController : public ACommonPlayerController
 {
 	GENERATED_BODY()
 
-
+public:
+	
 	AGiltPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UFUNCTION(BlueprintCallable, Category = "Gilt|PlayerController")
+	AGiltPlayerState* GetGiltPlayerState() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Gilt|PlayerController")
+	UGiltAbilitySystemComponent* GetGiltAbilitySystemComponent() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Gilt|PlayerController")
 	AGiltHUD* GetGiltHUD() const;
+
+	//~ACommonPlayerController interface
+	virtual void OnPossess(APawn* InPawn) override;
+	//~End of ACommonPlayerController interface
+
+protected:
 
 	//~APlayerController interface
 	virtual void AddCheats(bool bForce) override;

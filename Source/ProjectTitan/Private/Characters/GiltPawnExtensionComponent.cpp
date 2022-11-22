@@ -135,18 +135,6 @@ bool UGiltPawnExtensionComponent::CheckPawnReadyToInitialize()
 
 	APawn* Pawn = GetPawnChecked<APawn>();
 
-	const bool bHasAuthority = Pawn->HasAuthority();
-	const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
-
-	if (bHasAuthority || bIsLocallyControlled)
-	{
-		// Check for being possessed by a controller.
-		if (!GetController<AController>())
-		{
-			return false;
-		}
-	}
-
 	// Allow pawn components to have requirements.
 	TArray<UActorComponent*> InteractableComponents = Pawn->GetComponentsByInterface(UGiltReadyInterface::StaticClass());
 	for (UActorComponent* InteractableComponent : InteractableComponents)

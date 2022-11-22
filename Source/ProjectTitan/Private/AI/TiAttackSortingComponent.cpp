@@ -3,7 +3,6 @@
 
 #include "AI/TiAttackSortingComponent.h"
 
-#include "AI/TiAIControllerBase.h"
 
 // Sets default values for this component's properties
 UTiAttackSortingComponent::UTiAttackSortingComponent()
@@ -33,7 +32,7 @@ void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex)
 {
 	FCombo ActiveCombo = AttackData[AttackIndex].ComboData;
 
-	ATiAIControllerBase* AIController = Cast<ATiAIControllerBase>(GetOwner());
+	/*ATiAIControllerBase* AIController = Cast<ATiAIControllerBase>(GetOwner());
 
 	if(AIController)
 	{
@@ -82,7 +81,7 @@ void UTiAttackSortingComponent::ResetAttackScore(int32 AttackIndex)
 				Index ++;
 			}
 		}	
-	}
+	}*/
 }
 
 FGameplayTag UTiAttackSortingComponent::ConvertIndexToTag(int32 AttackIndex)

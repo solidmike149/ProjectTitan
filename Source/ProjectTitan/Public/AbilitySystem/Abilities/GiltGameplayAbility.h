@@ -17,6 +17,8 @@ class UGiltAbilitySystemComponent;
 UENUM(BlueprintType)
 enum class EGiltAbilityActivationPolicy : uint8
 {
+	Default,
+	
 	// Try to activate the ability when the input is triggered.
 	OnInputTriggered,
 

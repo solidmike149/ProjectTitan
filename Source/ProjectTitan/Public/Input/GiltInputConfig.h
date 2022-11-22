@@ -7,23 +7,8 @@
 #include "Engine/DataAsset.h"
 #include "GiltInputConfig.generated.h"
 
+class UGiltInputAction;
 class UInputAction;
-/**
- * FGiltInputAction
- *
- *	Struct used to map a input action to a gameplay input tag.
- */
-USTRUCT(BlueprintType)
-struct FGiltInputAction
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly)
-	const UInputAction* InputAction = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, Meta = (Categories = "InputTag"))
-	FGameplayTag InputTag;
-};
 
 /**
  * UGiltInputConfig
@@ -44,10 +29,10 @@ public:
 	
 	// List of input actions used by the owner.  These input actions are mapped to a gameplay tag and must be manually bound.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (TitleProperty = "InputAction"))
-	TArray<FGiltInputAction> NativeInputActions;
+	TArray<UGiltInputAction*> NativeInputActions;
 
 	// List of input actions used by the owner.  These input actions are mapped to a gameplay tag and are automatically bound to abilities with matching input tags.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Meta = (TitleProperty = "InputAction"))
-	TArray<FGiltInputAction> AbilityInputActions;
+	TArray<UGiltInputAction*> AbilityInputActions;
 	
 };

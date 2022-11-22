@@ -66,6 +66,12 @@ void FGiltGameplayTags::AddMovementModeTag(FGameplayTag& OutTag, const ANSICHAR*
 	GameplayTags.MovementModeTagMap.Add(MovementMode, OutTag);
 }
 
+void FGiltGameplayTags::AddCustomMovementModeTag(FGameplayTag& OutTag, const ANSICHAR* TagName, uint8 CustomMovementMode)
+{
+	AddTag(OutTag, TagName, "Character custom movement mode tag.");
+	GameplayTags.CustomMovementModeTagMap.Add(CustomMovementMode, OutTag);
+}
+
 
 FGameplayTag FGiltGameplayTags::FindTagByString(FString TagString, bool bMatchPartialString)
 {

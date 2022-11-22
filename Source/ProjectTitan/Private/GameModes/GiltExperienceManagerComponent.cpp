@@ -12,6 +12,7 @@
 #include "GameModes/GiltExperienceDefinition.h"
 #include "GameModes/GiltExperienceManager.h"
 #include "Net/UnrealNetwork.h"
+#include "Settings/GiltSettingsLocal.h"
 #include "System/GiltAssetManager.h"
 
 
@@ -216,25 +217,25 @@ void UGiltExperienceManagerComponent::OnExperienceLoadComplete()
 			}
 		}
 
-		// 		// Add in our extra plugin
-		// 		if (!CurrentPlaylistData->GameFeaturePluginToActivateUntilDownloadedContentIsPresent.IsEmpty())
-		// 		{
-		// 			FString PluginURL;
-		// 			if (UGameFeaturesSubsystem::Get().GetPluginURLForBuiltInPluginByName(CurrentPlaylistData->GameFeaturePluginToActivateUntilDownloadedContentIsPresent, PluginURL))
-		// 			{
-		// 				GameFeaturePluginURLs.AddUnique(PluginURL);
-		// 			}
-		// 		}
+			// // Add in our extra plugin
+			// if (!CurrentPlaylistData->GameFeaturePluginToActivateUntilDownloadedContentIsPresent.IsEmpty())
+			// {
+			// 	FString PluginURL;
+			// 	if (UGameFeaturesSubsystem::Get().GetPluginURLForBuiltInPluginByName(CurrentPlaylistData->GameFeaturePluginToActivateUntilDownloadedContentIsPresent, PluginURL))
+			// 	{
+			// 		GameFeaturePluginURLs.AddUnique(PluginURL);
+			// 	}
+			// }
 	};
 
-	// CollectGameFeaturePluginURLs(CurrentExperience, CurrentExperience->GameFeaturesToEnable);
-	// for (const TObjectPtr<ULyraExperienceActionSet>& ActionSet : CurrentExperience->ActionSets)
-	// {
-	// 	if (ActionSet != nullptr)
-	// 	{
-	// 		CollectGameFeaturePluginURLs(ActionSet, ActionSet->GameFeaturesToEnable);
-	// 	}
-	// }
+	CollectGameFeaturePluginURLs(CurrentExperience, CurrentExperience->GameFeaturesToEnable);
+	for (const TObjectPtr<UGiltExperienceActionSet>& ActionSet : CurrentExperience->ActionSets)
+	{
+		if (ActionSet != nullptr)
+		{
+			CollectGameFeaturePluginURLs(ActionSet, ActionSet->GameFeaturesToEnable);
+		}
+	}
 
 	// Load and activate the features	
 	NumGameFeaturePluginsLoading = GameFeaturePluginURLs.Num();
@@ -333,7 +334,7 @@ void UGiltExperienceManagerComponent::OnExperienceFullLoadCompleted()
 
 	// Apply any necessary scalability settings
 #if !UE_SERVER
-	//UGiltSettingsLocal::Get()->OnExperienceLoaded();
+	UGiltSettingsLocal::Get()->OnExperienceLoaded();
 #endif
 }
 

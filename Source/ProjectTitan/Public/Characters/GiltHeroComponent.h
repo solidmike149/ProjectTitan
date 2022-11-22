@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "GiltPawnComponent.h"
+#include "InputAction.h"
 #include "Input/GiltMappableConfigPair.h"
 #include "GiltHeroComponent.generated.h"
 
@@ -53,12 +53,9 @@ protected:
 
 	virtual void InitializePlayerInput(UInputComponent* PlayerInputComponent);
 
-	void Input_AbilityInputTagPressed(FGameplayTag InputTag);
-	void Input_AbilityInputTagReleased(FGameplayTag InputTag);
+	void Input_AbilityInputTagTriggered(const FInputActionInstance& ActionInstance);
 
 	void Input_Move(const FInputActionValue& InputActionValue);
-	void Input_LookMouse(const FInputActionValue& InputActionValue);
-	void Input_LookStick(const FInputActionValue& InputActionValue);
 
 	void OnInputConfigActivated(const FLoadedMappableConfigPair& ConfigPair);
 	void OnInputConfigDeactivated(const FLoadedMappableConfigPair& ConfigPair);

@@ -4,6 +4,7 @@
 #include "Input/GiltInputConfig.h"
 
 #include "GiltLogChannels.h"
+#include "Input/GiltInputAction.h"
 
 UGiltInputConfig::UGiltInputConfig(const FObjectInitializer& ObjectInitializer)
 {
@@ -12,11 +13,11 @@ UGiltInputConfig::UGiltInputConfig(const FObjectInitializer& ObjectInitializer)
 
 const UInputAction* UGiltInputConfig::FindNativeInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound) const
 {
-	for (const FGiltInputAction& Action : NativeInputActions)
+	for (const UGiltInputAction* Action : NativeInputActions)
 	{
-		if (Action.InputAction && (Action.InputTag == InputTag))
+		if (Action && (Action->InputTag == InputTag))
 		{
-			return Action.InputAction;
+			return Action;
 		}
 	}
 
@@ -30,11 +31,11 @@ const UInputAction* UGiltInputConfig::FindNativeInputActionForTag(const FGamepla
 
 const UInputAction* UGiltInputConfig::FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound) const
 {
-	for (const FGiltInputAction& Action : AbilityInputActions)
+	for (const UGiltInputAction* Action : AbilityInputActions)
 	{
-		if (Action.InputAction && (Action.InputTag == InputTag))
+		if (Action && (Action->InputTag == InputTag))
 		{
-			return Action.InputAction;
+			return Action;
 		}
 	}
 

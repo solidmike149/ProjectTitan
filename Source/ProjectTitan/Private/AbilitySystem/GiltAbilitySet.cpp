@@ -93,26 +93,6 @@ void UGiltAbilitySet::GiveToAbilitySystem(UGiltAbilitySystemComponent* GiltASC,
 		}
 	}
 
-	// Grant the gameplay effects.
-	for (int32 EffectIndex = 0; EffectIndex < GrantedGameplayEffects.Num(); ++EffectIndex)
-	{
-		const FGiltAbilitySet_GameplayEffect& EffectToGrant = GrantedGameplayEffects[EffectIndex];
-
-		if (!IsValid(EffectToGrant.GameplayEffect))
-		{
-			UE_LOG(LogTemp, Error, TEXT("GrantedGameplayEffects[%d] on ability set [%s] is not valid"), EffectIndex, *GetNameSafe(this));
-			continue;
-		}
-
-		const UGameplayEffect* GameplayEffect = EffectToGrant.GameplayEffect->GetDefaultObject<UGameplayEffect>();
-		const FActiveGameplayEffectHandle GameplayEffectHandle = GiltASC->ApplyGameplayEffectToSelf(GameplayEffect, EffectToGrant.EffectLevel, GiltASC->MakeEffectContext());
-
-		if (OutGrantedHandles)
-		{
-			OutGrantedHandles->AddGameplayEffectHandle(GameplayEffectHandle);
-		}
-	}
-
 	// Grant the attribute sets.
 	for (int32 SetIndex = 0; SetIndex < GrantedAttributes.Num(); ++SetIndex)
 	{
@@ -130,6 +110,26 @@ void UGiltAbilitySet::GiveToAbilitySystem(UGiltAbilitySystemComponent* GiltASC,
 		if (OutGrantedHandles)
 		{
 			OutGrantedHandles->AddAttributeSet(NewSet);
+		}
+	}
+
+	// Grant the gameplay effects.
+	for (int32 EffectIndex = 0; EffectIndex < GrantedGameplayEffects.Num(); ++EffectIndex)
+	{
+		const FGiltAbilitySet_GameplayEffect& EffectToGrant = GrantedGameplayEffects[EffectIndex];
+
+		if (!IsValid(EffectToGrant.GameplayEffect))
+		{
+			UE_LOG(LogTemp, Error, TEXT("GrantedGameplayEffects[%d] on ability set [%s] is not valid"), EffectIndex, *GetNameSafe(this));
+			continue;
+		}
+
+		const UGameplayEffect* GameplayEffect = EffectToGrant.GameplayEffect->GetDefaultObject<UGameplayEffect>();
+		const FActiveGameplayEffectHandle GameplayEffectHandle = GiltASC->ApplyGameplayEffectToSelf(GameplayEffect, EffectToGrant.EffectLevel, GiltASC->MakeEffectContext());
+
+		if (OutGrantedHandles)
+		{
+			OutGrantedHandles->AddGameplayEffectHandle(GameplayEffectHandle);
 		}
 	}
 }

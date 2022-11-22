@@ -4,8 +4,8 @@
 #include "Characters/GiltCharacter.h"
 
 #include "CommonInputSubsystem.h"
+#include "GiltGameplayTags.h"
 #include "AbilitySystem/GiltAbilitySystemComponent.h"
-#include "AbilitySystem/TiAbilitySystemComponent.h"
 #include "Characters/GiltCharacterMovementComponent.h"
 #include "Characters/GiltHealthComponent.h"
 #include "Characters/GiltPawnExtensionComponent.h"
@@ -44,6 +44,8 @@ void AGiltCharacter::PostInitializeComponents()
 	
 	HealthComponent->OnDeathStarted.AddDynamic(this, &ThisClass::OnDeathStarted);
     HealthComponent->OnDeathFinished.AddDynamic(this, &ThisClass::OnDeathFinished);
+
+	PawnExtComponent->CheckPawnReadyToInitialize();
 }
 
 AGiltPlayerController* AGiltCharacter::GetGiltPlayerController() const
@@ -70,11 +72,10 @@ void AGiltCharacter::OnAbilitySystemInitialized()
 {
 	UGiltAbilitySystemComponent* GiltASC = GetGiltAbilitySystemComponent();
 	check(GiltASC);
+	
+	HealthComponent->InitializeWithAbilitySystem(GiltASC);
 
-	// TODO Uncomment
-	//HealthComponent->InitializeWithAbilitySystem(GiltASC);
-
-	//InitializeGameplayTags();
+	InitializeGameplayTags();
 }
 
 void AGiltCharacter::OnAbilitySystemUninitialized()
@@ -82,7 +83,14 @@ void AGiltCharacter::OnAbilitySystemUninitialized()
 	HealthComponent->UninitializeFromAbilitySystem();
 }
 
-/*void AGiltCharacter::InitializeGameplayTags()
+void AGiltCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	PawnExtComponent->SetupPlayerInputComponent();
+}
+
+void AGiltCharacter::InitializeGameplayTags()
 {
 	// Clear tags that may be lingering on the ability system from the previous pawn.
 	if (UGiltAbilitySystemComponent* GiltASC = GetGiltAbilitySystemComponent())
@@ -108,7 +116,7 @@ void AGiltCharacter::OnAbilitySystemUninitialized()
 		UGiltCharacterMovementComponent* GiltMoveComp = CastChecked<UGiltCharacterMovementComponent>(GetCharacterMovement());
 		SetMovementModeTag(GiltMoveComp->MovementMode, GiltMoveComp->CustomMovementMode, true);
 	}
-}*/
+}
 
 void AGiltCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
 {
@@ -155,11 +163,6 @@ void AGiltCharacter::OnDeathStarted(AActor*)
 	DisableMovementAndCollision();
 }
 
-void AGiltCharacter::OnDeathFinished(AActor*)
-{
-	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::DestroyDueToDeath);
-}
-
 void AGiltCharacter::DisableMovementAndCollision()
 {
 	if (Controller)
@@ -177,6 +180,12 @@ void AGiltCharacter::DisableMovementAndCollision()
 	MoveComp->DisableMovement();
 }
 
+void AGiltCharacter::OnDeathFinished(AActor*)
+{
+	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::DestroyDueToDeath);
+}
+
+
 void AGiltCharacter::DestroyDueToDeath()
 {
 	K2_OnDeathFinished();
@@ -191,6 +200,39 @@ void AGiltCharacter::UninitAndDestroy()
 	SetLifeSpan(0.1f);
 	
 	//SetActorHiddenInGame(true);
+}
+
+void AGiltCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+
+	UGiltCharacterMovementComponent* GiltMoveComp = CastChecked<UGiltCharacterMovementComponent>(GetCharacterMovement());
+
+	SetMovementModeTag(PrevMovementMode, PreviousCustomMode, false);
+	SetMovementModeTag(GiltMoveComp->MovementMode, GiltMoveComp->CustomMovementMode, true);
+}
+
+void AGiltCharacter::SetMovementModeTag(EMovementMode MovementMode, uint8 CustomMovementMode, bool bTagEnabled)
+{
+	if (UGiltAbilitySystemComponent* GiltASC = GetGiltAbilitySystemComponent())
+	{
+		const FGiltGameplayTags& GameplayTags = FGiltGameplayTags::Get();
+		const FGameplayTag* MovementModeTag = nullptr;
+
+		if (MovementMode == MOVE_Custom)
+		{
+			MovementModeTag = GameplayTags.CustomMovementModeTagMap.Find(CustomMovementMode);
+		}
+		else
+		{
+			MovementModeTag = GameplayTags.MovementModeTagMap.Find(MovementMode);
+		}
+
+		if (MovementModeTag && MovementModeTag->IsValid())
+		{
+			GiltASC->SetLooseGameplayTagCount(*MovementModeTag, (bTagEnabled ? 1 : 0));
+		}
+	}
 }
 
 

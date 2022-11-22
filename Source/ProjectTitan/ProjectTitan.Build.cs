@@ -35,7 +35,8 @@ public class ProjectTitan : ModuleRules
 			"GameFeatures",
 			"UIExtension",
 			"AudioMixer",
-			"AudioModulation"
+			"AudioModulation",
+			"GameplayMessageRuntime"
 		});
 	}
 }

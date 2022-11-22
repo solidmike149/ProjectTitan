@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "EnhancedInputComponent.h"
+#include "GiltInputAction.h"
 #include "GiltInputConfig.h"
 #include "GiltMappableConfigPair.h"
 #include "InputTriggers.h"
 #include "GiltInputComponent.generated.h"
 
 
-class UGiltInputConfig;
 class UEnhancedInputLocalPlayerSubsystem;
 
 /**
@@ -33,8 +33,8 @@ public:
 	template<class UserClass, typename FuncType>
 	void BindNativeAction(const UGiltInputConfig* InputConfig, const FGameplayTag& InputTag, ETriggerEvent TriggerEvent, UserClass* Object, FuncType Func, bool bLogIfNotFound);
 
-	template<class UserClass, typename PressedFuncType, typename ReleasedFuncType>
-	void BindAbilityActions(const UGiltInputConfig* InputConfig, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, TArray<uint32>& BindHandles);
+	template<class UserClass, typename PressedFuncType>
+	void BindAbilityActions(const UGiltInputConfig* InputConfig, UserClass* Object, PressedFuncType PressedFunc, TArray<uint32>& BindHandles);
 
 	void RemoveBinds(TArray<uint32>& BindHandles);
 
@@ -53,23 +53,18 @@ void UGiltInputComponent::BindNativeAction(const UGiltInputConfig* InputConfig, 
 	}
 }
 
-template<class UserClass, typename PressedFuncType, typename ReleasedFuncType>
-void UGiltInputComponent::BindAbilityActions(const UGiltInputConfig* InputConfig, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, TArray<uint32>& BindHandles)
+template<class UserClass, typename PressedFuncType>
+void UGiltInputComponent::BindAbilityActions(const UGiltInputConfig* InputConfig, UserClass* Object, PressedFuncType PressedFunc, TArray<uint32>& BindHandles)
 {
 	check(InputConfig);
 
-	for (const FGiltInputAction& Action : InputConfig->AbilityInputActions)
+	for (const UGiltInputAction* Action : InputConfig->AbilityInputActions)
 	{
-		if (Action.InputAction && Action.InputTag.IsValid())
+		if (Action && Action->InputTag.IsValid())
 		{
 			if (PressedFunc)
 			{
-				BindHandles.Add(BindAction(Action.InputAction, ETriggerEvent::Triggered, Object, PressedFunc, Action.InputTag).GetHandle());
-			}
-			
-			if (ReleasedFunc)
-			{
-				BindHandles.Add(BindAction(Action.InputAction, ETriggerEvent::Completed, Object, ReleasedFunc, Action.InputTag).GetHandle());
+				BindHandles.Add(BindAction(Action, ETriggerEvent::Triggered, Object, PressedFunc).GetHandle());
 			}
 		}
 	}

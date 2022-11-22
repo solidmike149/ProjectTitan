@@ -49,7 +49,7 @@ bool FMappableConfigPair::ActivatePair(const FMappableConfigPair& Pair)
 {
 	UGiltAssetManager& AssetManager = UGiltAssetManager::Get();
 	// Only activate a pair that has been successfully registered
-	if (FMappableConfigPair::RegisterPair(Pair) && Pair.CanBeActivated())
+	if (RegisterPair(Pair) && Pair.CanBeActivated())
 	{		
 		if (UGiltSettingsLocal* Settings = UGiltSettingsLocal::Get())
 		{
@@ -71,7 +71,7 @@ void FMappableConfigPair::DeactivatePair(const FMappableConfigPair& Pair)
 	{
 		if (const UPlayerMappableInputConfig* LoadedConfig = AssetManager.GetAsset(Pair.Config))
 		{
-			//Settings->DeactivateInputConfig(LoadedConfig);
+			Settings->DeactivateInputConfig(LoadedConfig);
 		}
 	}
 }
@@ -84,7 +84,7 @@ void FMappableConfigPair::UnregisterPair(const FMappableConfigPair& Pair)
 	{
 		if (const UPlayerMappableInputConfig* LoadedConfig = AssetManager.GetAsset(Pair.Config))
 		{
-			//Settings->UnregisterInputConfig(LoadedConfig);
+			Settings->UnregisterInputConfig(LoadedConfig);
 		}
 	}
 }

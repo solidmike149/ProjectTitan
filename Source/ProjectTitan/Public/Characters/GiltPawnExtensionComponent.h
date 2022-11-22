@@ -78,7 +78,7 @@ protected:
 	FSimpleMulticastDelegate OnAbilitySystemUninitialized;
 
 	// Pawn data used to create the pawn.  Specified from a spawn function or on a placed instance.
-	UPROPERTY(EditInstanceOnly, Category = "Gilt|Pawn")
+	UPROPERTY(EditAnywhere, Category = "Gilt|Pawn")
 	const UGiltPawnData* PawnData;
 
 	// Pointer to the ability system component that is cached for convenience.

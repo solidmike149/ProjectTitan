@@ -6,8 +6,8 @@
 #include "GameplayEffectExtension.h"
 #include "GiltGameplayTags.h"
 #include "GiltLogChannels.h"
-#include "AbilitySystem/TiAbilitySystemComponent.h"
-#include "AbilitySystem/AttributeSets/TiHealthSet.h"
+#include "AbilitySystem/GiltAbilitySystemComponent.h"
+#include "AbilitySystem/AttributeSets/GiltHealthSet.h"
 
 
 UGiltHealthComponent::UGiltHealthComponent(const FObjectInitializer& ObjectInitializer)
@@ -28,34 +28,34 @@ void UGiltHealthComponent::OnUnregister()
 	Super::OnUnregister();
 }
 
-void UGiltHealthComponent::InitializeWithAbilitySystem(UTiAbilitySystemComponent* InASC)
+void UGiltHealthComponent::InitializeWithAbilitySystem(UGiltAbilitySystemComponent* InASC)
 {
 	AActor* Owner = GetOwner();
 	check(Owner);
 
 	if (AbilitySystemComponent)
 	{
-		UE_LOG(LogGilt, Error, TEXT("TiHealthComponent: Health component for owner [%s] has already been initialized with an ability system."), *GetNameSafe(Owner));
+		UE_LOG(LogGilt, Error, TEXT("GiltHealthComponent: Health component for owner [%s] has already been initialized with an ability system."), *GetNameSafe(Owner));
 		return;
 	}
 
 	AbilitySystemComponent = InASC;
 	if (!AbilitySystemComponent)
 	{
-		UE_LOG(LogGilt, Error, TEXT("TiHealthComponent: Cannot initialize health component for owner [%s] with NULL ability system."), *GetNameSafe(Owner));
+		UE_LOG(LogGilt, Error, TEXT("GiltHealthComponent: Cannot initialize health component for owner [%s] with NULL ability system."), *GetNameSafe(Owner));
 		return;
 	}
 
-	HealthSet = AbilitySystemComponent->GetSet<UTiHealthSet>();
+	HealthSet = AbilitySystemComponent->GetSet<UGiltHealthSet>();
 	if (!HealthSet)
 	{
-		UE_LOG(LogGilt, Error, TEXT("TiHealthComponent: Cannot initialize health component for owner [%s] with NULL health set on the ability system."), *GetNameSafe(Owner));
+		UE_LOG(LogGilt, Error, TEXT("GiltHealthComponent: Cannot initialize health component for owner [%s] with NULL health set on the ability system."), *GetNameSafe(Owner));
 		return;
 	}
 
 	// Register to listen for attribute changes.
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UTiHealthSet::GetHealthAttribute()).AddUObject(this, &ThisClass::HandleHealthChanged);
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UTiHealthSet::GetMaxHealthAttribute()).AddUObject(this, &ThisClass::HandleMaxHealthChanged);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UGiltHealthSet::GetHealthAttribute()).AddUObject(this, &ThisClass::HandleHealthChanged);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UGiltHealthSet::GetMaxHealthAttribute()).AddUObject(this, &ThisClass::HandleMaxHealthChanged);
 	HealthSet->OnOutOfHealth.AddUObject(this, &ThisClass::HandleOutOfHealth);
 
 	ClearGameplayTags();

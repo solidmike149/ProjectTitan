@@ -118,6 +118,43 @@ void UGiltAbilitySystemComponent::CancelAbilitiesByFunc(TShouldCancelAbilityFunc
 	}
 }
 
+void UGiltAbilitySystemComponent::CancelInputActivatedAbilities(bool bReplicateCancelAbility)
+{
+	auto ShouldCancelFunc = [this](const UGiltGameplayAbility* LyraAbility, FGameplayAbilitySpecHandle Handle)
+	{
+		const EGiltAbilityActivationPolicy ActivationPolicy = LyraAbility->GetActivationPolicy();
+		return ((ActivationPolicy == EGiltAbilityActivationPolicy::OnInputTriggered) || (ActivationPolicy == EGiltAbilityActivationPolicy::WhileInputActive));
+	};
+
+	CancelAbilitiesByFunc(ShouldCancelFunc, bReplicateCancelAbility);
+}
+
+void UGiltAbilitySystemComponent::AbilitySpecInputPressed(FGameplayAbilitySpec& Spec)
+{
+	Super::AbilitySpecInputPressed(Spec);
+
+	// We don't support UGameplayAbility::bReplicateInputDirectly.
+	// Use replicated events instead so that the WaitInputPress ability task works.
+	if (Spec.IsActive())
+	{
+		// Invoke the InputPressed event. This is not replicated here. If someone is listening, they may replicate the InputPressed event to the server.
+		InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, Spec.Handle, Spec.ActivationInfo.GetActivationPredictionKey());
+	}
+}
+
+void UGiltAbilitySystemComponent::AbilitySpecInputReleased(FGameplayAbilitySpec& Spec)
+{
+	Super::AbilitySpecInputReleased(Spec);
+
+	// We don't support UGameplayAbility::bReplicateInputDirectly.
+	// Use replicated events instead so that the WaitInputRelease ability task works.
+	if (Spec.IsActive())
+	{
+		// Invoke the InputReleased event. This is not replicated here. If someone is listening, they may replicate the InputReleased event to the server.
+		InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, Spec.Handle, Spec.ActivationInfo.GetActivationPredictionKey());
+	}
+}
+
 void UGiltAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
 {
 	if (InputTag.IsValid())
@@ -158,8 +195,6 @@ void UGiltAbilitySystemComponent::ProcessAbilityInput(float DeltaTime, bool bGam
 
 	static TArray<FGameplayAbilitySpecHandle> AbilitiesToActivate;
 	AbilitiesToActivate.Reset();
-
-	//@TODO: See if we can use FScopedServerAbilityRPCBatcher ScopedRPCBatcher in some of these loops
 
 	//
 	// Process all abilities that activate when the input is held.
@@ -252,6 +287,7 @@ void UGiltAbilitySystemComponent::ClearAbilityInput()
 	InputReleasedSpecHandles.Reset();
 	InputHeldSpecHandles.Reset();
 }
+
 bool UGiltAbilitySystemComponent::IsActivationGroupBlocked(EGiltAbilityActivationGroup Group) const
 {
 	bool bBlocked = false;

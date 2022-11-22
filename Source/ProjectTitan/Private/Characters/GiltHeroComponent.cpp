@@ -10,6 +10,7 @@
 #include "Characters/GiltPawnData.h"
 #include "Characters/GiltPawnExtensionComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
+#include "Input/GiltInputAction.h"
 #include "Input/GiltInputComponent.h"
 #include "Player/GiltPlayerController.h"
 #include "Player/GiltPlayerState.h"
@@ -18,12 +19,6 @@
 #if WITH_EDITOR
 #include "Misc/UObjectToken.h"
 #endif	// WITH_EDITOR
-
-namespace GiltHero
-{
-	static const float LookYawRate = 300.0f;
-	static const float LookPitchRate = 165.0f;
-}
 
 const FName UGiltHeroComponent::NAME_BindInputsNow("BindInputsNow");
 
@@ -200,19 +195,20 @@ void UGiltHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCompo
 				// Register any default input configs with the settings so that they will be applied to the player during AddInputMappings
 				for (const FMappableConfigPair& Pair : DefaultInputConfigs)
 				{
-					FMappableConfigPair::ActivatePair(Pair);
+					if (Pair.bShouldActivateAutomatically && Pair.CanBeActivated())
+					{
+						FModifyContextOptions Options = {};
+						Options.bIgnoreAllPressedKeysUntilRelease = false;
+						// Actually add the config to the local player							
+						Subsystem->AddPlayerMappableConfig(Pair.Config.LoadSynchronous(), Options);	
+					}
 				}
 				
 				UGiltInputComponent* GiltIC = CastChecked<UGiltInputComponent>(PlayerInputComponent);
 				GiltIC->AddInputMappings(InputConfig, Subsystem);
-				if (UGiltSettingsLocal* LocalSettings = UGiltSettingsLocal::Get())
-				{
-					LocalSettings->OnInputConfigActivated.AddUObject(this, &UGiltHeroComponent::OnInputConfigActivated);
-					LocalSettings->OnInputConfigDeactivated.AddUObject(this, &UGiltHeroComponent::OnInputConfigDeactivated);
-				}
 
 				TArray<uint32> BindHandles;
-				GiltIC->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputTagPressed, &ThisClass::Input_AbilityInputTagReleased, /*out*/ BindHandles);
+				GiltIC->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputTagTriggered, /*out*/ BindHandles);
 
 				GiltIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, /*bLogIfNotFound=*/ false);
 			}
@@ -292,7 +288,7 @@ void UGiltHeroComponent::AddAdditionalInputConfig(const UGiltInputConfig* InputC
 
 	if (const UGiltPawnExtensionComponent* PawnExtComp = UGiltPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
 	{
-		GiltIC->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputTagPressed, &ThisClass::Input_AbilityInputTagReleased, /*out*/ BindHandles);
+		GiltIC->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputTagTriggered, /*out*/ BindHandles);
 	}
 }
 
@@ -306,7 +302,7 @@ bool UGiltHeroComponent::IsReadyToBindInputs() const
 	return bReadyToBindInputs;
 }
 
-void UGiltHeroComponent::Input_AbilityInputTagPressed(FGameplayTag InputTag)
+void UGiltHeroComponent::Input_AbilityInputTagTriggered(const FInputActionInstance& ActionInstance)
 {
 	if (const APawn* Pawn = GetPawn<APawn>())
 	{
@@ -314,26 +310,20 @@ void UGiltHeroComponent::Input_AbilityInputTagPressed(FGameplayTag InputTag)
 		{
 			if (UGiltAbilitySystemComponent* GiltASC = PawnExtComp->GetGiltAbilitySystemComponent())
 			{
-				GiltASC->AbilityInputTagPressed(InputTag);
+				const UGiltInputAction* InputAction = Cast<UGiltInputAction>(ActionInstance.GetSourceAction());
+				
+				FInputActionValue ActionValue = ActionInstance.GetValue();
+				
+				if(ActionValue.Get<bool>())
+				{
+					GiltASC->AbilityInputTagPressed(InputAction->InputTag);
+				}
+				else
+				{
+					GiltASC->AbilityInputTagReleased(InputAction->InputTag);
+				}
 			}
 		}	
-	}
-}
-
-void UGiltHeroComponent::Input_AbilityInputTagReleased(FGameplayTag InputTag)
-{
-	const APawn* Pawn = GetPawn<APawn>();
-	if (!Pawn)
-	{
-		return;
-	}
-
-	if (const UGiltPawnExtensionComponent* PawnExtComp = UGiltPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
-	{
-		if (UGiltAbilitySystemComponent* GiltASC = PawnExtComp->GetGiltAbilitySystemComponent())
-		{
-			GiltASC->AbilityInputTagReleased(InputTag);
-		}
 	}
 }
 
@@ -345,66 +335,18 @@ void UGiltHeroComponent::Input_Move(const FInputActionValue& InputActionValue)
 	if (Controller)
 	{
 		const FVector2D Value = InputActionValue.Get<FVector2D>();
-		const FRotator MovementRotation(0.0f, Controller->GetControlRotation().Yaw, 0.0f);
+		const FRotator MovementRotation(0.0f, Controller->GetControlRotation().Yaw - 45, 0.0f);
 
 		if (Value.X != 0.0f)
 		{
-			const FVector MovementDirection = MovementRotation.RotateVector(FVector::RightVector);
+			const FVector MovementDirection = FRotationMatrix(MovementRotation).GetUnitAxis(EAxis::Y);
 			Pawn->AddMovementInput(MovementDirection, Value.X);
 		}
 
 		if (Value.Y != 0.0f)
 		{
-			const FVector MovementDirection = MovementRotation.RotateVector(FVector::ForwardVector);
+			const FVector MovementDirection = FRotationMatrix(MovementRotation).GetUnitAxis(EAxis::X);
 			Pawn->AddMovementInput(MovementDirection, Value.Y);
 		}
 	}
 }
-
-void UGiltHeroComponent::Input_LookMouse(const FInputActionValue& InputActionValue)
-{
-	APawn* Pawn = GetPawn<APawn>();
-
-	if (!Pawn)
-	{
-		return;
-	}
-	
-	const FVector2D Value = InputActionValue.Get<FVector2D>();
-
-	if (Value.X != 0.0f)
-	{
-		Pawn->AddControllerYawInput(Value.X);
-	}
-
-	if (Value.Y != 0.0f)
-	{
-		Pawn->AddControllerPitchInput(Value.Y);
-	}
-}
-
-void UGiltHeroComponent::Input_LookStick(const FInputActionValue& InputActionValue)
-{
-	APawn* Pawn = GetPawn<APawn>();
-
-	if (!Pawn)
-	{
-		return;
-	}
-	
-	const FVector2D Value = InputActionValue.Get<FVector2D>();
-
-	const UWorld* World = GetWorld();
-	check(World);
-
-	if (Value.X != 0.0f)
-	{
-		Pawn->AddControllerYawInput(Value.X * GiltHero::LookYawRate * World->GetDeltaSeconds());
-	}
-
-	if (Value.Y != 0.0f)
-	{
-		Pawn->AddControllerPitchInput(Value.Y * GiltHero::LookPitchRate * World->GetDeltaSeconds());
-	}
-}
-

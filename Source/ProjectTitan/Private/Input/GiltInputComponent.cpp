@@ -89,6 +89,7 @@ void UGiltInputComponent::RemoveBinds(TArray<uint32>& BindHandles)
 
 void UGiltInputComponent::AddInputConfig(const FLoadedMappableConfigPair& ConfigPair, UEnhancedInputLocalPlayerSubsystem* InputSubsystem)
 {
+	UE_LOG(LogTemp, Warning, TEXT("InputAdded"));
 	check(InputSubsystem);
 	if (ensure(ConfigPair.bIsActive))
 	{

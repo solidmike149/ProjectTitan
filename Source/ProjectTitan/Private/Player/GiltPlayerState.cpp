@@ -6,20 +6,20 @@
 #include "GiltLogChannels.h"
 #include "AbilitySystem/GiltAbilitySet.h"
 #include "AbilitySystem/GiltAbilitySystemComponent.h"
-#include "AbilitySystem/AttributeSets/TiHealthSet.h"
+#include "AbilitySystem/AttributeSets/GiltHealthSet.h"
 #include "Characters/GiltPawnData.h"
 #include "Characters/GiltPawnExtensionComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "GameModes/GiltExperienceManagerComponent.h"
 #include "Player/GiltPlayerController.h"
 
-const FName AGiltPlayerState::NAME_LyraAbilityReady("LyraAbilitiesReady");
+const FName AGiltPlayerState::NAME_LyraAbilityReady("GiltAbilitiesReady");
 
 AGiltPlayerState::AGiltPlayerState(const FObjectInitializer& ObjectInitializer)
 {
 	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<UGiltAbilitySystemComponent>(this, "AbilitySystemComponent");
 
-	CreateDefaultSubobject<UTiHealthSet>("HealthSet");
+	CreateDefaultSubobject<UGiltHealthSet>("HealthSet");
 }
 
 AGiltPlayerController* AGiltPlayerState::GetGiltPlayerController() const
@@ -31,8 +31,6 @@ UAbilitySystemComponent* AGiltPlayerState::GetAbilitySystemComponent() const
 {
 	return GetGiltAbilitySystemComponent();
 }
-
-
 
 void AGiltPlayerState::PostInitializeComponents()
 {

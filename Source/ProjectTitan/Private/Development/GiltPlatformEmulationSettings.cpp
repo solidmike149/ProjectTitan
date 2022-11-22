@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GiltPlatformEmulationSettings.h"
+#include "Development/GiltPlatformEmulationSettings.h"
 
 #include "CommonUIVisibilitySubsystem.h"
 #include "DeviceProfiles/DeviceProfile.h"

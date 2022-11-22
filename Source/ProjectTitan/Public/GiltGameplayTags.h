@@ -52,13 +52,14 @@ struct FGiltGameplayTags
 	FGameplayTag Movement_Mode_Custom;
 
 	TMap<uint8, FGameplayTag> MovementModeTagMap;
-
+	TMap<uint8, FGameplayTag> CustomMovementModeTagMap;
 
 protected:
 
 	void AddAllTags(UGameplayTagsManager& Manager);
 	void AddTag(FGameplayTag& OutTag, const ANSICHAR* TagName, const ANSICHAR* TagComment);
 	void AddMovementModeTag(FGameplayTag& OutTag, const ANSICHAR* TagName, uint8 MovementMode);
+	void AddCustomMovementModeTag(FGameplayTag& OutTag, const ANSICHAR* TagName, uint8 CustomMovementMode);
 
 private:
 
