@@ -8,6 +8,7 @@
 #include "GiltCharacterMovementComponent.generated.h"
 
 PROJECTTITAN_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Gameplay_MovementStopped);
+PROJECTTITAN_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Gameplay_RotationStopped);
 
 /**
  * UGiltCharacterMovementComponent
@@ -21,11 +22,10 @@ class PROJECTTITAN_API UGiltCharacterMovementComponent : public UCharacterMoveme
 
 public:
 
-	/** Tags (applied on the ASC) that block the movement for the owner */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "MovementBlock")
-	FGameplayTagContainer MovementBlockingTag;
-
 	UGiltCharacterMovementComponent();
 	
+	//~UMovementComponent interface
+	virtual FRotator GetDeltaRotation(float DeltaTime) const override;
 	virtual float GetMaxSpeed() const override;
+	//~End of UMovementComponent interface
 };

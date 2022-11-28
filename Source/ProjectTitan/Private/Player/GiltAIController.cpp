@@ -16,7 +16,7 @@ AGiltAIController::AGiltAIController(const FObjectInitializer& ObjectInitializer
 
 void AGiltAIController::OnUnPossess()
 {
-	 /*
+	/*
 	 // Make sure the pawn that is being unpossessed doesn't remain our ASC's avatar actor
 	if (APawn* PawnBeingUnpossessed = GetPawn())
 	{
